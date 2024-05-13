@@ -19,6 +19,7 @@ export const users = [
     height: "5'10",
     phoneNumber: "(914)351-2238",
     activeClientStatus: true,
+    nextSession: null,
   },
   {
     firstName: "Kim",
@@ -29,5 +30,17 @@ export const users = [
     height: "5'3",
     phoneNumber: "(914)225-7906",
     activeClientStatus: true,
+    nextSession: null,
+    schedule: [
+      {
+        sessions: [
+          {
+            sessionType: "30 min",
+            sessionDate: "05/31/2024",
+          },
+          { sessionType: "30 min", sessionDate: "05/24/2025" },
+        ],
+      },
+    ],
   },
 ];
