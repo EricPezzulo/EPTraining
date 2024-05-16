@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { ProfileForm } from "./components/ui/form";
+
+import CardDemo from "./components/ui/card";
 
 export default function Home() {
   return (
@@ -7,30 +10,17 @@ export default function Home() {
         <h1 className="text-3xl font-bold text-black">EPTraining.com</h1>
         <Link className="text-neutrual-800 font-medium" href="/clients/">
           Clients
-        </Link>{" "}
-        <form
-          className="flex w-96 flex-col rounded border border-slate-200 p-5 shadow"
-          action=""
-        >
-          <label htmlFor="usernameInput">Username</label>
-          <input
-            className="rounded bg-slate-100 px-2 outline-none"
-            name="usernameInput"
-            type="text"
+        </Link>
+        <CardDemo>
+          <ProfileForm
+            usernamePlaceholder="johndoe@email.com"
+            passwordPlaceholder="strongpassword!"
+            usernameInputLabel="Username"
+            passwordInputLabel="Password"
+            buttonLabel="Sign in"
+            // formDescription="test"
           />
-          <label htmlFor="passwordInput">Password</label>
-          <input
-            className="rounded bg-slate-100 px-2 outline-none"
-            name="passwordInput"
-            type="password"
-          />{" "}
-          <button
-            className=" mt-5 h-8 w-20 self-center rounded bg-blue-600 font-medium text-white"
-            type="submit"
-          >
-            Sign In
-          </button>
-        </form>
+        </CardDemo>
       </div>
     </main>
   );
