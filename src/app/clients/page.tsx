@@ -1,20 +1,3 @@
-// import { IoFilterOutline } from "react-icons/io5";
-// import { IoIosAdd } from "react-icons/io";
-// import { users } from "../../../mockDb";
-// import ClientTable from "../components/client-components/ClientTable";
-
-// export default function Page() {
-//   return (
-//     <div className="flex flex-col items-center">
-//       <ClientTable />
-//       todo
-//       <p>add filters for clients with sessions today</p>
-//       <p>add status indicators for clients that are active</p>
-//       <p>add new client feature</p>
-//     </div>
-//   );
-// }
-
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -74,6 +57,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Tooltip,
   TooltipContent,
+  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
@@ -89,6 +73,7 @@ export default function page() {
             <Package2 className="h-4 w-4 transition-all group-hover:scale-110" />
             <span className="sr-only">Acme Inc</span>
           </Link>
+          <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
@@ -101,6 +86,8 @@ export default function page() {
             </TooltipTrigger>
             <TooltipContent side="right">Dashboard</TooltipContent>
           </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
@@ -112,7 +99,8 @@ export default function page() {
               </Link>
             </TooltipTrigger>
             <TooltipContent side="right">Orders</TooltipContent>
-          </Tooltip>
+          </Tooltip></TooltipProvider>
+          <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
@@ -125,7 +113,10 @@ export default function page() {
             </TooltipTrigger>
             <TooltipContent side="right">Products</TooltipContent>
           </Tooltip>
-          <Tooltip>
+          </TooltipProvider>
+        
+          <TooltipProvider>
+            <Tooltip>
             <TooltipTrigger asChild>
               <Link
                 href="#"
@@ -137,7 +128,12 @@ export default function page() {
             </TooltipTrigger>
             <TooltipContent side="right">Customers</TooltipContent>
           </Tooltip>
-          <Tooltip>
+          </TooltipProvider>
+
+          <TooltipProvider>
+
+       
+          <Tooltip>  
             <TooltipTrigger asChild>
               <Link
                 href="#"
@@ -148,9 +144,11 @@ export default function page() {
               </Link>
             </TooltipTrigger>
             <TooltipContent side="right">Analytics</TooltipContent>
-          </Tooltip>
+          </Tooltip>   </TooltipProvider>
         </nav>
         <nav className="mt-auto flex flex-col items-center gap-4 px-2 py-4">
+         <TooltipProvider>
+      
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
@@ -162,7 +160,8 @@ export default function page() {
               </Link>
             </TooltipTrigger>
             <TooltipContent side="right">Settings</TooltipContent>
-          </Tooltip>
+          </Tooltip>  
+          </TooltipProvider>
         </nav>
       </aside>
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
