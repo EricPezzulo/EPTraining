@@ -131,8 +131,6 @@ export default function page() {
           </TooltipProvider>
 
           <TooltipProvider>
-
-       
           <Tooltip>  
             <TooltipTrigger asChild>
               <Link
@@ -144,7 +142,8 @@ export default function page() {
               </Link>
             </TooltipTrigger>
             <TooltipContent side="right">Analytics</TooltipContent>
-          </Tooltip>   </TooltipProvider>
+          </Tooltip>   
+          </TooltipProvider>
         </nav>
         <nav className="mt-auto flex flex-col items-center gap-4 px-2 py-4">
          <TooltipProvider>
@@ -279,7 +278,7 @@ export default function page() {
               <TabsList>
                 <TabsTrigger value="all">All</TabsTrigger>
                 <TabsTrigger value="active">Active</TabsTrigger>
-                <TabsTrigger value="draft">Draft</TabsTrigger>
+                <TabsTrigger value="draft">Past</TabsTrigger>
                 <TabsTrigger value="archived" className="hidden sm:flex">
                   Archived
                 </TabsTrigger>
@@ -323,9 +322,9 @@ export default function page() {
             <TabsContent value="all">
               <Card x-chunk="dashboard-06-chunk-0">
                 <CardHeader>
-                  <CardTitle>Products</CardTitle>
+                  <CardTitle>Clients</CardTitle>
                   <CardDescription>
-                    Manage your products and view their sales performance.
+                    Manage your clients and view their workout programs, meal plans, and track their performance.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -337,12 +336,12 @@ export default function page() {
                         </TableHead>
                         <TableHead>Name</TableHead>
                         <TableHead>Status</TableHead>
-                        <TableHead>Price</TableHead>
+                        <TableHead>Package type</TableHead>
                         <TableHead className="hidden md:table-cell">
-                          Total Sales
+                          Total sessions
                         </TableHead>
                         <TableHead className="hidden md:table-cell">
-                          Created at
+                          Date PT started
                         </TableHead>
                         <TableHead>
                           <span className="sr-only">Actions</span>
@@ -356,7 +355,7 @@ export default function page() {
                             alt="Product image"
                             className="aspect-square rounded-md object-cover"
                             height="64"
-                            src="/placeholder.svg"
+                            src="/public/Ichigo.jpeg"
                             width="64"
                           />
                         </TableCell>
