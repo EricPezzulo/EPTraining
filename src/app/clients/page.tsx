@@ -1,3 +1,4 @@
+'use client'
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -57,8 +58,15 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Sidebar from "../components/ui/sidebar";
 import { users } from "../../../mockDb";
+import { useState } from "react";
+import DialogBox from "../components/ui/dialog";
 
-export default function page() {
+export default function Dashboard() {
+  const [newClientDialogBox, setNewClientDialogBox] = useState<boolean>(false)
+  const toggleNewClientDialog =()=> {
+    setNewClientDialogBox((prev) => !prev)
+    console.log(newClientDialogBox)
+  }
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <Sidebar />
@@ -210,7 +218,7 @@ export default function page() {
                     Export
                   </span>
                 </Button>
-                <Button size="sm" className="h-7 gap-1">
+                <Button onClick={toggleNewClientDialog} size="sm" className="h-7 gap-1">
                   <PlusCircle className="h-3.5 w-3.5" />
                   <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                     New Client
@@ -308,6 +316,8 @@ export default function page() {
           </Tabs>
         </main>
       </div>
+<DialogBox/>
+      
     </div>
   );
 }

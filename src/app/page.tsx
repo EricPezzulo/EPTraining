@@ -21,7 +21,6 @@ export default function Home() {
             // formDescription="test"
           />
         </CardDemo>
-        <p>testing new arch install</p>
       </div>
     </main>
   );
