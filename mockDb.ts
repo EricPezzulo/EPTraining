@@ -1,3 +1,29 @@
+type Session = {
+  sessionType: string;
+  sessionDate: string;
+};
+
+type Schedule = {
+  sessions: Session[];
+};
+type User = {
+  firstName: string;
+  lastName: string;
+  middleInitial: string;
+  age: number;
+  DOB: string | null;
+  weight: number | null;
+  height: string;
+  phoneNumber: string;
+  activeClientStatus: boolean;
+  nextSession: string | null;
+  currentPTM: string;
+  schedule?: Schedule[];
+  totalSessions: number;
+  firstSession: string;
+  clientPicture: string;
+  clientId: string;
+};
 export const users = [
   {
     firstName: "Eric",
@@ -12,7 +38,8 @@ export const users = [
     currentPTM: "PTM-8 3 Months 30 Min",
     totalSessions: 12,
     firstSession: "05/08/2024",
-    clientPicture: '/images/Ichigo.jpeg'
+    clientPicture: '/images/Ichigo.jpeg',
+    clientId: '001'
   },
   {
     firstName: "Ben",
@@ -27,7 +54,8 @@ export const users = [
     currentPTM: "PTM-12 3 Month 30 Min",
     totalSessions: 25,
     firstSession: '05/14/2024',
-    clientPicture: '/images/Ichigo.jpeg'
+    clientPicture: '/images/Ichigo.jpeg',
+    clientId: '002'
   },
   {
     firstName: "Kim",
@@ -54,7 +82,8 @@ export const users = [
     ],
     totalSessions: 4,
     firstSession: '05/10/2024',
-    clientPicture: '/images/Ichigo.jpeg'
+    clientPicture: '/images/Ichigo.jpeg',
+    clientId: '003'
   },
   {
     firstName: "Valerie",
@@ -81,6 +110,8 @@ export const users = [
     ],
     totalSessions: 4,
     firstSession: '05/10/2024',
-    clientPicture: '/images/Ichigo.jpeg'
+    clientPicture: '/images/Ichigo.jpeg',
+    clientId: '004'
+
   }
 ];

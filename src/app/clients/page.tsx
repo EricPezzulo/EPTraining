@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -62,11 +62,11 @@ import { useState } from "react";
 import DialogBox from "../components/ui/dialog";
 
 export default function Dashboard() {
-  const [newClientDialogBox, setNewClientDialogBox] = useState<boolean>(false)
-  const toggleNewClientDialog =()=> {
-    setNewClientDialogBox((prev) => !prev)
-    console.log(newClientDialogBox)
-  }
+  const [newClientDialogBox, setNewClientDialogBox] = useState<boolean>(false);
+  const toggleNewClientDialog = () => {
+    setNewClientDialogBox((prev) => !prev);
+    console.log(newClientDialogBox);
+  };
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <Sidebar />
@@ -218,12 +218,8 @@ export default function Dashboard() {
                     Export
                   </span>
                 </Button>
-                <Button onClick={toggleNewClientDialog} size="sm" className="h-7 gap-1">
-                  <PlusCircle className="h-3.5 w-3.5" />
-                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                    New Client
-                  </span>
-                </Button>
+                <DialogBox /> 
+               
               </div>
             </div>
             <TabsContent value="all">
@@ -258,57 +254,69 @@ export default function Dashboard() {
                     </TableHeader>
                     <TableBody>
                       {users.map((client, index) => (
-                      <TableRow key={index}>
-                      <TableCell className="hidden sm:table-cell">
-                        <Image
-                          alt="Product image"
-                          className="aspect-square rounded-md object-cover"
-                          height="64"
-                          src={client.clientPicture}
-                          width="64"
-                        />
-                      </TableCell>
-                      <TableCell className="font-medium">
-                        {client.firstName} {client.lastName}
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant={client.activeClientStatus ? "outline" : "secondary"}>{client.activeClientStatus ? 'Active' : 'Inactive'}</Badge>
-                      </TableCell>
-                      <TableCell>{client.currentPTM}</TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        {client.totalSessions}
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        {client.firstSession}
-                      </TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button
-                              aria-haspopup="true"
-                              size="icon"
-                              variant="ghost"
+                        <TableRow key={index}>
+                          <TableCell className="hidden sm:table-cell">
+                            <Image
+                              alt="Product image"
+                              className="aspect-square rounded-md object-cover"
+                              height="64"
+                              src={client.clientPicture}
+                              width="64"
+                            />
+                          </TableCell>
+                          <TableCell className="font-medium">
+                            {client.firstName} {client.lastName}
+                          </TableCell>
+                          <TableCell>
+                            <Badge
+                              variant={
+                                client.activeClientStatus
+                                  ? "outline"
+                                  : "secondary"
+                              }
                             >
-                              <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Toggle menu</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem>Edit</DropdownMenuItem>
-                            <DropdownMenuItem>Delete</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
+                              {client.activeClientStatus
+                                ? "Active"
+                                : "Inactive"}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>{client.currentPTM}</TableCell>
+                          <TableCell className="hidden md:table-cell">
+                            {client.totalSessions}
+                          </TableCell>
+                          <TableCell className="hidden md:table-cell">
+                            {client.firstSession}
+                          </TableCell>
+                          <TableCell>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button
+                                  aria-haspopup="true"
+                                  size="icon"
+                                  variant="ghost"
+                                >
+                                  <MoreHorizontal className="h-4 w-4" />
+                                  <span className="sr-only">Toggle menu</span>
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                <Link href={`/clients/${client.clientId}`}>
+                                <DropdownMenuItem>Edit</DropdownMenuItem>
+                                </Link>
+                                
+                                <DropdownMenuItem>Delete</DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </TableCell>
+                        </TableRow>
                       ))}
                     </TableBody>
                   </Table>
                 </CardContent>
                 <CardFooter>
                   <div className="text-xs text-muted-foreground">
-                    Showing <strong>1-10</strong> of <strong>32</strong>{" "}
-                    clients
+                    Showing <strong>1-10</strong> of <strong>32</strong> clients
                   </div>
                 </CardFooter>
               </Card>
@@ -316,8 +324,6 @@ export default function Dashboard() {
           </Tabs>
         </main>
       </div>
-<DialogBox/>
-      
     </div>
   );
 }
