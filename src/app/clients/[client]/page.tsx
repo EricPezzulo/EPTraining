@@ -289,86 +289,123 @@ export default function ClientPage() {
                     <CardContent>
                       <Table>
                         <TableHeader>
-                          <TableRow className='w-full'>
-                            <TableHead className="w-full">Body Composition Analysis</TableHead>
-                          
+                          <TableRow className="w-full">
+                            <TableHead className="w-full">
+                              Body Composition Analysis
+                            </TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          <TableRow>
-                            <TableCell className="font-semibold w-[150px]">
+                          <TableRow className="w-full">
+                            <TableCell className="w-full font-semibold ">
                               Total amount of water in body
                             </TableCell>
-                            <TableCell>
-                              <Label htmlFor="total-body-water" className='w-[400px]'>
+                            <TableCell className="w-full whitespace-nowrap">
+                              <Label
+                                htmlFor="total-body-water"
+                                className="w-full"
+                              >
                                 Total Body Water (lbs)
                               </Label>
                             </TableCell>
-                            <Label
-                              htmlFor="total-body-water"
-                              className="sr-only"
-                            >
-                              Total Body Water (lbs)
-                            </Label>
-                            <Input
-                              id="total-body-water"
-                              type="number"
-                              defaultValue="0"
-                              className='w-[100px]'
-                            />
-                   
+                            <TableCell className="w-full">
+                              <Label
+                                htmlFor="total-body-water"
+                                className="sr-only"
+                              >
+                                Total Body Water (lbs)
+                              </Label>
+                              <Input
+                                id="total-body-water"
+                                type="number"
+                                defaultValue="68"
+                                className="w-[75px] text-right"
+                              />
+                            </TableCell>
                           </TableRow>
-                          <TableRow>
-                            <TableCell className="font-semibold">
-                              GGPC-002
+
+                          <TableRow className="w-full">
+                            <TableCell className="w-full font-semibold ">
+                              For building muscles and strengthening bones
                             </TableCell>
-                            <TableCell>
-                              <Label htmlFor="stock-2" className="sr-only">
-                                Stock
+                            <TableCell className="w-full whitespace-nowrap">
+                              <Label
+                                htmlFor="total-body-water"
+                                className="w-full"
+                              >
+                                Dry Lean Mass (lbs)
+                              </Label>
+                            </TableCell>
+                            <TableCell className="w-full">
+                              <Label
+                                htmlFor="total-body-water"
+                                className="sr-only"
+                              >
+                                Dry Lean Mass (lbs)
                               </Label>
                               <Input
-                                id="stock-2"
+                                id="total-body-water"
                                 type="number"
-                                defaultValue="143"
+                                defaultValue="21.6"
+                                className="w-[75px] text-right"
                               />
                             </TableCell>
-                            <TableCell>
-                              <Label htmlFor="price-2" className="sr-only">
-                                Price
-                              </Label>
-                              <Input
-                                id="price-2"
-                                type="number"
-                                defaultValue="99.99"
-                              />
-                            </TableCell>
-                         
                           </TableRow>
-                          <TableRow>
-                            <TableCell className="font-semibold">
-                              GGPC-003
+
+                          <TableRow className="w-full">
+                            <TableCell className="w-full font-semibold ">
+                              For storing excess energy
                             </TableCell>
-                            <TableCell>
-                              <Label htmlFor="stock-3" className="sr-only">
-                                Stock
+                            <TableCell className="w-full whitespace-nowrap">
+                              <Label
+                                htmlFor="total-body-water"
+                                className="w-full"
+                              >
+                                Body Fat Mass (lbs)
+                              </Label>
+                            </TableCell>
+                            <TableCell className="w-full">
+                              <Label
+                                htmlFor="total-body-water"
+                                className="sr-only"
+                              >
+                                Body Fat Mass (lbs)
                               </Label>
                               <Input
-                                id="stock-3"
+                                id="total-body-water"
                                 type="number"
-                                defaultValue="32"
+                                defaultValue="48.7"
+                                className="w-[75px] text-right"
                               />
                             </TableCell>
-                            <TableCell>
-                              <Label htmlFor="price-3" className="sr-only">
-                                Stock
+                          </TableRow>
+
+                          <TableRow className="w-full">
+                            <TableCell className="w-full font-semibold ">
+                              Sum of the above
+                            </TableCell>
+                            <TableCell className="w-full whitespace-nowrap">
+                              <Label
+                                htmlFor="total-body-water"
+                                className="w-full"
+                              >
+                                Weight (lbs)
+                              </Label>
+                            </TableCell>
+                            <TableCell className="w-full">
+                              <Label
+                                htmlFor="total-body-water"
+                                className="sr-only"
+                              >
+                                Weight (lbs)
                               </Label>
                               <Input
-                                id="price-3"
+                                id="total-body-water"
                                 type="number"
-                                defaultValue="99.99"
+                                defaultValue="185"
+                                className="w-[75px] text-right"
                               />
                             </TableCell>
-                           
                           </TableRow>
                         </TableBody>
                       </Table>
