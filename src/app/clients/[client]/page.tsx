@@ -107,14 +107,13 @@ export default function ClientPage() {
     const foundUser = users.find((user) => user.clientId === id) || null;
     if (foundUser) setUser(foundUser);
   }, [user, id]);
-
   return (
     user && (
       <div className="flex min-h-screen w-full flex-col bg-muted/40">
         <Sidebar />
         <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
           <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
-            <Sheet>
+            {/* <Sheet>
               <SheetTrigger asChild>
                 <Button size="icon" variant="outline" className="sm:hidden">
                   <PanelLeft className="h-5 w-5" />
@@ -167,7 +166,7 @@ export default function ClientPage() {
                   </Link>
                 </nav>
               </SheetContent>
-            </Sheet>
+            </Sheet> */}
             <Breadcrumb className="hidden md:flex">
               <BreadcrumbList>
                 <BreadcrumbItem>
@@ -225,12 +224,12 @@ export default function ClientPage() {
             <div className="mx-auto grid max-w-[59rem] flex-1 auto-rows-max gap-4">
               <div className="flex items-center gap-4">
                 <Link href="/clients/">
-                <Button variant="outline" size="icon" className="h-7 w-7">
-                  <ChevronLeft className="h-4 w-4" />
-                  <span className="sr-only">Back</span>
-                </Button>
+                  <Button variant="outline" size="icon" className="h-7 w-7">
+                    <ChevronLeft className="h-4 w-4" />
+                    <span className="sr-only">Back</span>
+                  </Button>
                 </Link>
-                
+
                 <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
                   {user?.firstName} {user?.lastName}
                 </h1>
@@ -280,57 +279,44 @@ export default function ClientPage() {
                   </Card>
                   <Card x-chunk="dashboard-07-chunk-1">
                     <CardHeader>
-                      <CardTitle>Stock</CardTitle>
+                      <CardTitle>Body Composition Analysis</CardTitle>
                       <CardDescription>
-                        Lipsum dolor sit amet, consectetur adipiscing elit
+                        The body weight us the sum of Body Fat Mass and Lean
+                        Body Mass, which is composed of Dry Lean Mass and Total
+                        Body Water.
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
                       <Table>
                         <TableHeader>
-                          <TableRow>
-                            <TableHead className="w-[100px]">SKU</TableHead>
-                            <TableHead>Stock</TableHead>
-                            <TableHead>Price</TableHead>
-                            <TableHead className="w-[100px]">Size</TableHead>
+                          <TableRow className='w-full'>
+                            <TableHead className="w-full">Body Composition Analysis</TableHead>
+                          
                           </TableRow>
                         </TableHeader>
                         <TableBody>
                           <TableRow>
-                            <TableCell className="font-semibold">
-                              GGPC-001
+                            <TableCell className="font-semibold w-[150px]">
+                              Total amount of water in body
                             </TableCell>
                             <TableCell>
-                              <Label htmlFor="stock-1" className="sr-only">
-                                Stock
+                              <Label htmlFor="total-body-water" className='w-[400px]'>
+                                Total Body Water (lbs)
                               </Label>
-                              <Input
-                                id="stock-1"
-                                type="number"
-                                defaultValue="100"
-                              />
                             </TableCell>
-                            <TableCell>
-                              <Label htmlFor="price-1" className="sr-only">
-                                Price
-                              </Label>
-                              <Input
-                                id="price-1"
-                                type="number"
-                                defaultValue="99.99"
-                              />
-                            </TableCell>
-                            <TableCell>
-                              <ToggleGroup
-                                type="single"
-                                defaultValue="s"
-                                variant="outline"
-                              >
-                                <ToggleGroupItem value="s">S</ToggleGroupItem>
-                                <ToggleGroupItem value="m">M</ToggleGroupItem>
-                                <ToggleGroupItem value="l">L</ToggleGroupItem>
-                              </ToggleGroup>
-                            </TableCell>
+                            <Label
+                              htmlFor="total-body-water"
+                              className="sr-only"
+                            >
+                              Total Body Water (lbs)
+                            </Label>
+                            <Input
+                              id="total-body-water"
+                              type="number"
+                              defaultValue="0"
+                              className='w-[100px]'
+                            />
+                   
                           </TableRow>
                           <TableRow>
                             <TableCell className="font-semibold">
@@ -356,17 +342,7 @@ export default function ClientPage() {
                                 defaultValue="99.99"
                               />
                             </TableCell>
-                            <TableCell>
-                              <ToggleGroup
-                                type="single"
-                                defaultValue="m"
-                                variant="outline"
-                              >
-                                <ToggleGroupItem value="s">S</ToggleGroupItem>
-                                <ToggleGroupItem value="m">M</ToggleGroupItem>
-                                <ToggleGroupItem value="l">L</ToggleGroupItem>
-                              </ToggleGroup>
-                            </TableCell>
+                         
                           </TableRow>
                           <TableRow>
                             <TableCell className="font-semibold">
@@ -392,17 +368,7 @@ export default function ClientPage() {
                                 defaultValue="99.99"
                               />
                             </TableCell>
-                            <TableCell>
-                              <ToggleGroup
-                                type="single"
-                                defaultValue="s"
-                                variant="outline"
-                              >
-                                <ToggleGroupItem value="s">S</ToggleGroupItem>
-                                <ToggleGroupItem value="m">M</ToggleGroupItem>
-                                <ToggleGroupItem value="l">L</ToggleGroupItem>
-                              </ToggleGroup>
-                            </TableCell>
+                           
                           </TableRow>
                         </TableBody>
                       </Table>
