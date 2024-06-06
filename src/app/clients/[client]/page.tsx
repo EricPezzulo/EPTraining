@@ -127,6 +127,7 @@ export default function ClientPage() {
   const id = pathname.split("/")[2];
   const [user, setUser] = useState<User | null>(null);
   const [clientData, setClientData] = useState<Client | null>(null);
+  const [sendData, setSendData] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -145,6 +146,15 @@ export default function ClientPage() {
     const foundUser = users.find((user) => user.clientId === id) || null;
     if (foundUser) setUser(foundUser);
   }, [user, id]);
+
+  async function postRequest() {
+    const res = fetch("http://localhost:3000/clients/api", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(sendData),
+    });
+  }
+
   console.log(clientData);
   return (
     user && (
@@ -600,9 +610,17 @@ export default function ClientPage() {
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <div></div>
-                      <Button size="sm" variant="secondary">
-                        Archive Product
+                      {/*  */}
+                      <Input
+                        onChange={(e) => setSendData(e.target.value)}
+                        type="text"
+                      />
+                      <Button
+                        onClick={postRequest}
+                        size="sm"
+                        variant="secondary"
+                      >
+                        Send to API
                       </Button>
                     </CardContent>
                   </Card>
