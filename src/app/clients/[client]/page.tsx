@@ -99,14 +99,53 @@ type User = {
   clientPicture: string;
   clientId: string;
 };
+type Client = {
+  address: {
+    city: string;
+  };
+  geo: {
+    lat: string;
+    lng: string;
+  };
+  street: string;
+  suite: string;
+  zipcode: string;
+  company: {
+    bs: string;
+    catchPhrase: string;
+    name: string;
+  };
+  email: string;
+  id: number;
+  name: string;
+  phone: string;
+  username: string;
+  website: string;
+};
 export default function ClientPage() {
   const pathname = usePathname();
   const id = pathname.split("/")[2];
   const [user, setUser] = useState<User | null>(null);
+  const [clientData, setClientData] = useState<Client | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/clients/api");
+        const data = await res.json();
+        setClientData(data);
+      } catch (error) {
+        console.error("There was a problem fetching the data", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   useEffect(() => {
     const foundUser = users.find((user) => user.clientId === id) || null;
     if (foundUser) setUser(foundUser);
   }, [user, id]);
+  console.log(clientData);
   return (
     user && (
       <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -544,6 +583,20 @@ export default function ClientPage() {
                       <CardTitle>Archive Product</CardTitle>
                       <CardDescription>
                         Lipsum dolor sit amet, consectetur adipiscing elit.
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div></div>
+                      <Button size="sm" variant="secondary">
+                        Archive Product
+                      </Button>
+                    </CardContent>
+                  </Card>
+                  <Card x-chunk="dashboard-07-chunk-5">
+                    <CardHeader>
+                      <CardTitle>{clientData?.name}</CardTitle>
+                      <CardDescription>
+                        {clientData?.company.catchPhrase}
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
