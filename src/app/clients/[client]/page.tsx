@@ -466,6 +466,62 @@ export default function ClientPage() {
                       </Button>
                     </CardFooter>
                   </Card>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Muscle-Fat Analysis</CardTitle>
+                      <CardDescription>Lorem</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <Table>
+                        <TableHeader>
+                          <TableRow className="w-full">
+                            <TableHead className="w-full">
+                              Muscle-Fat Analysis
+                            </TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableRow className="w-full">
+                          <TableCell className="w-full font-semibold">
+                            Weight
+                          </TableCell>
+                          <TableCell className="w-full font-semibold">
+                            (lbs)
+                          </TableCell>
+                          {/* <TableCell className='w-full'>185</TableCell> */}
+                          <TableCell>
+                            <Input
+                              type="text"
+                              className="w-[65px]"
+                              defaultValue={185}
+                            />
+                          </TableCell>
+                        </TableRow>
+                        <TableRow className="w-full">
+                          <TableCell className="w-full font-semibold">
+                            SMM{" "}
+                            <span className="font-medium text-muted-foreground">
+                              (Skeletal Muscle Mass)
+                            </span>
+                          </TableCell>
+                          <TableCell className="w-full font-semibold">
+                            (lbs)
+                          </TableCell>
+                          <TableCell>
+                            <Input
+                              type="text"
+                              className="w-[65px]"
+                              defaultValue={45.3}
+                            />
+                          </TableCell>
+                        </TableRow>
+                        <TableRow className="w-full">
+                          <TableCell className="w-full font-semibold">
+                            Body Fat Mass
+                          </TableCell>
+                        </TableRow>
+                      </Table>
+                    </CardContent>
+                  </Card>
                   <Card x-chunk="dashboard-07-chunk-2">
                     <CardHeader>
                       <CardTitle>Product Category</CardTitle>
@@ -619,7 +675,7 @@ export default function ClientPage() {
                         onClick={postRequest}
                         size="sm"
                         variant="secondary"
-                      >
+                      className='mt-5'>
                         Send to API
                       </Button>
                     </CardContent>
