@@ -459,116 +459,53 @@ export default function ClientPage() {
                         </TableBody>
                       </Table>
                     </CardContent>
-                    <CardFooter className="justify-center border-t p-4">
-                      <Button size="sm" variant="ghost" className="gap-1">
-                        <PlusCircle className="h-3.5 w-3.5" />
-                        Add Variant
-                      </Button>
-                    </CardFooter>
                   </Card>
                   <Card>
                     <CardHeader>
-                      <CardTitle>Muscle-Fat Analysis</CardTitle>
-                      <CardDescription>Lorem</CardDescription>
+                      <CardTitle>InBody Results</CardTitle>
+                      <CardDescription>
+                        The InBody results provide a body composition analysis,
+                        obesity analysis, muscle-fat analysis, and segmental
+                        lean analysis. This is an effective way to track a
+                        clients progress.
+                      </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <Table>
-                        <TableHeader>
-                          <TableRow className="w-full">
-                            <TableHead className="w-full">
-                              Muscle-Fat Analysis
-                            </TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableRow className="w-full">
-                          <TableCell className="w-full font-semibold">
-                            Weight
-                          </TableCell>
-                          <TableCell className="w-full font-semibold">
-                            (lbs)
-                          </TableCell>
-                          {/* <TableCell className='w-full'>185</TableCell> */}
-                          <TableCell>
-                            <Input
-                              type="text"
-                              className="w-[65px]"
-                              defaultValue={185}
+                    <div>
+                     <div className="grid gap-2">
+                        <Image
+                          alt="Product image"
+                          className="aspect-square w-full rounded-md object-cover"
+                          height="300"
+                          src="/placeholder.svg"
+                          width="300"
+                        />
+                        <div className="grid grid-cols-3 gap-2">
+                          <button>
+                            <Image
+                              alt="Product image"
+                              className="aspect-square w-full rounded-md object-cover"
+                              height="84"
+                              src="/placeholder.svg"
+                              width="84"
                             />
-                          </TableCell>
-                        </TableRow>
-                        <TableRow className="w-full">
-                          <TableCell className="w-full font-semibold">
-                            SMM{" "}
-                            <span className="font-medium text-muted-foreground">
-                              (Skeletal Muscle Mass)
-                            </span>
-                          </TableCell>
-                          <TableCell className="w-full font-semibold">
-                            (lbs)
-                          </TableCell>
-                          <TableCell>
-                            <Input
-                              type="text"
-                              className="w-[65px]"
-                              defaultValue={45.3}
+                          </button>
+                          <button>
+                            <Image
+                              alt="Product image"
+                              className="aspect-square w-full rounded-md object-cover"
+                              height="84"
+                              src="/placeholder.svg"
+                              width="84"
                             />
-                          </TableCell>
-                        </TableRow>
-                        <TableRow className="w-full">
-                          <TableCell className="w-full font-semibold">
-                            Body Fat Mass
-                          </TableCell>
-                        </TableRow>
-                      </Table>
-                    </CardContent>
-                  </Card>
-                  <Card x-chunk="dashboard-07-chunk-2">
-                    <CardHeader>
-                      <CardTitle>Product Category</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid gap-6 sm:grid-cols-3">
-                        <div className="grid gap-3">
-                          <Label htmlFor="category">Category</Label>
-                          <Select>
-                            <SelectTrigger
-                              id="category"
-                              aria-label="Select category"
-                            >
-                              <SelectValue placeholder="Select category" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="clothing">Clothing</SelectItem>
-                              <SelectItem value="electronics">
-                                Electronics
-                              </SelectItem>
-                              <SelectItem value="accessories">
-                                Accessories
-                              </SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div className="grid gap-3">
-                          <Label htmlFor="subcategory">
-                            Subcategory (optional)
-                          </Label>
-                          <Select>
-                            <SelectTrigger
-                              id="subcategory"
-                              aria-label="Select subcategory"
-                            >
-                              <SelectValue placeholder="Select subcategory" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="t-shirts">T-Shirts</SelectItem>
-                              <SelectItem value="hoodies">Hoodies</SelectItem>
-                              <SelectItem value="sweatshirts">
-                                Sweatshirts
-                              </SelectItem>
-                            </SelectContent>
-                          </Select>
+                          </button>
+                          <button className="flex aspect-square w-full items-center justify-center rounded-md border border-dashed">
+                            <Upload className="h-4 w-4 text-muted-foreground" />
+                            <span className="sr-only">Upload</span>
+                          </button>
                         </div>
                       </div>
+                    </div>
                     </CardContent>
                   </Card>
                 </div>
@@ -675,7 +612,8 @@ export default function ClientPage() {
                         onClick={postRequest}
                         size="sm"
                         variant="secondary"
-                      className='mt-5'>
+                        className="mt-5"
+                      >
                         Send to API
                       </Button>
                     </CardContent>
