@@ -231,7 +231,7 @@ export default function ClientPage() {
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Edit Product</BreadcrumbPage>
+                  <BreadcrumbPage>{`${user.firstName} ${user.lastName}`}</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>

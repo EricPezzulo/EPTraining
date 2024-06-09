@@ -1,9 +1,15 @@
 import Link from "next/link";
 import { ProfileForm } from "./components/ui/form";
-
+import { createClient } from "@/utils/supabase/server";
+import { cookies } from "next/headers";
 import CardDemo from "./components/ui/card";
 
 export default function Home() {
+  // const cookieStore = cookies();
+  // const supabase = createClient(cookieStore);
+  // const {data: clients} = await supabase.from('clients').select()
+
+  // console.log(clients)
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div>
