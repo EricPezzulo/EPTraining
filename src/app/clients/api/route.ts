@@ -1,15 +1,24 @@
+import { NextResponse } from "next/server";
+import { createClient } from "@/utils/supabase/server";
+import { cookies } from "next/headers";
+
 export async function GET(request: Request) {
+  console.log('route hit')
   try {
-    const res = await fetch("https://jsonplaceholder.typicode.com/users/1", {
-      next: { revalidate: 60 },
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await res.json();
-    return Response.json(data);
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
+    const { data, error } = await supabase.from("clients").select();
+    if (error) {
+      throw error;
+    }
+console.log(data)
+    return NextResponse.json( data , { status: 200 });
   } catch (error) {
     console.error("Something went wrong in your request", error);
+    return NextResponse.json(
+      { error: "Something went wrong" },
+      { status: 500 },
+    );
   }
 }
 

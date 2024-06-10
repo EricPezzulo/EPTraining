@@ -12,20 +12,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PlusCircle } from "lucide-react";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { users } from "../../../../mockDb";
 import { v4 as uuidv4 } from "uuid";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { createClient } from "@/utils/supabase/server";
-import { cookies } from "next/headers";
 
-export default function DialogBox() {
-  const connectToDb = async () => {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-  };
-  connectToDb();
-  const tableName = "clients";
+interface ChildProps {
+  setShouldFetch: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const DialogBox:React.FC<ChildProps> =({setShouldFetch}) => {
+  const [loading, setLoading] = useState<Boolean>(false);
 
   const newClientInfo = useRef<{
     firstName: string;
@@ -36,10 +33,7 @@ export default function DialogBox() {
     lastName: "",
     username: "",
   });
-  const dataToPost = {
-    firstName: newClientInfo.current.firstName,
-    lastName: newClientInfo.current.lastName,
-  };
+
   const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     newClientInfo.current.firstName = e.target.value;
   };
@@ -51,17 +45,30 @@ export default function DialogBox() {
   };
 
   const addClient = async () => {
-    const { data, error } = await supabase.from(tableName).upsert([dataToPost]);
+    setLoading(true);
+    const dataToPost = {
+      firstName: newClientInfo.current.firstName,
+      lastName: newClientInfo.current.lastName,
+    };
 
-    if (error) {
-      console.error("Error posting data:", error);
-      return;
+    try{
+      const response = await fetch('../api/addClient', {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(dataToPost)
+      }) 
+      if(!response.ok) {
+        throw new Error("Error posting data")
+      }
+      setShouldFetch((prev)=> !prev)
+      const result = await response.json()
+      console.log("Data posted successfully", result.data)
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setLoading(false)
     }
-
-    console.log("Data posted successfully:", data);
   };
-
-  addClient();
 
   return (
     <Dialog>
@@ -115,8 +122,8 @@ export default function DialogBox() {
         </div>
         <DialogFooter>
           <DialogClose asChild>
-            <Button onClick={addClient} type="button">
-              Add Client
+            <Button onClick={()=> addClient} type="button">
+              {loading ? "Adding...": "Add Client"}
             </Button>
           </DialogClose>
         </DialogFooter>
@@ -124,3 +131,5 @@ export default function DialogBox() {
     </Dialog>
   );
 }
+
+export default DialogBox;

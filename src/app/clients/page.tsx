@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
+  Divide,
   Dumbbell,
   File,
   Home,
@@ -58,15 +59,40 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Sidebar from "../components/ui/sidebar";
 import { users } from "../../../mockDb";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DialogBox from "../components/ui/dialog";
+import { User } from "./[client]/page";
 
 export default function Dashboard() {
   const [newClientDialogBox, setNewClientDialogBox] = useState<boolean>(false);
+  const [clientList, setClientList] = useState<User[]>([]);
+  const [shouldFetch, setShouldFetch] = useState<boolean>(false);
+  // const [error, setError] = useState(null)
   const toggleNewClientDialog = () => {
     setNewClientDialogBox((prev) => !prev);
     console.log(newClientDialogBox);
   };
+  useEffect(() => {
+    const fetchClientList = async () => {
+      try {
+        const res = await fetch("/clients/api/", {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
+        if (!res.ok) {
+          throw new Error("Network response failed");
+        }
+        const data = await res.json();
+        setClientList(data);
+      } catch (error) {
+        console.error("Error fetching clients:", error);
+        // setError(error.message)
+      }
+    };
+    fetchClientList();
+  }, [shouldFetch]);
+
+  console.log(clientList);
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <Sidebar />
@@ -165,7 +191,7 @@ export default function Dashboard() {
                     Export
                   </span>
                 </Button>
-                <DialogBox />
+                {/* <DialogBox setShouldFetch={setShouldFetch} /> */}
               </div>
             </div>
             <TabsContent value="all">
@@ -199,14 +225,14 @@ export default function Dashboard() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {users.map((client, index) => (
+                      {clientList?.map((client, index) => (
                         <TableRow key={index}>
                           <TableCell className="hidden sm:table-cell">
                             <Image
                               alt="Product image"
                               className="aspect-square rounded-md object-cover"
                               height="64"
-                              src={client.clientPicture}
+                              src={client?.clientPicture || '/images/Ichigo.jpeg'}
                               width="64"
                             />
                           </TableCell>
@@ -216,22 +242,22 @@ export default function Dashboard() {
                           <TableCell>
                             <Badge
                               variant={
-                                client.activeClientStatus
+                                client?.activeClientStatus
                                   ? "outline"
                                   : "secondary"
                               }
                             >
-                              {client.activeClientStatus
+                              {client?.activeClientStatus
                                 ? "Active"
                                 : "Inactive"}
                             </Badge>
                           </TableCell>
-                          <TableCell>{client.currentPTM}</TableCell>
+                          <TableCell>{client?.currentPTM}</TableCell>
                           <TableCell className="hidden md:table-cell">
-                            {client.totalSessions}
+                            {client?.totalSessions}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
-                            {client.firstSession}
+                            {client?.firstSession}
                           </TableCell>
                           <TableCell>
                             <DropdownMenu>
