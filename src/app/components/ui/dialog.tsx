@@ -14,34 +14,55 @@ import { Label } from "@/components/ui/label";
 import { PlusCircle } from "lucide-react";
 import React, { useRef } from "react";
 import { users } from "../../../../mockDb";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import { DialogClose } from "@radix-ui/react-dialog";
+import { createClient } from "@/utils/supabase/server";
+import { cookies } from "next/headers";
 
 export default function DialogBox() {
-  const newClientInfo = useRef<{firstName:string, lastName:string, username:string}>({
+  const connectToDb = async () => {
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
+  };
+  connectToDb();
+  const tableName = "clients";
+
+  const newClientInfo = useRef<{
+    firstName: string;
+    lastName: string;
+    username: string;
+  }>({
     firstName: "",
     lastName: "",
     username: "",
   });
-   const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const dataToPost = {
+    firstName: newClientInfo.current.firstName,
+    lastName: newClientInfo.current.lastName,
+  };
+  const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     newClientInfo.current.firstName = e.target.value;
   };
   const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    newClientInfo.current.lastName = e.target.value
-  }
+    newClientInfo.current.lastName = e.target.value;
+  };
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    newClientInfo.current.username = e.target.value
-  }
+    newClientInfo.current.username = e.target.value;
+  };
 
-  const addClient =() => {
-    // adding to mockDB
-    // add a clientID also
-    users.push({...newClientInfo.current, clientId: uuidv4() })
-    // console.log(newClientInfo)
-    console.log(users)
+  const addClient = async () => {
+    const { data, error } = await supabase.from(tableName).upsert([dataToPost]);
 
-  }
-  
+    if (error) {
+      console.error("Error posting data:", error);
+      return;
+    }
+
+    console.log("Data posted successfully:", data);
+  };
+
+  addClient();
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -85,7 +106,7 @@ export default function DialogBox() {
               Username
             </Label>
             <Input
-            onChange={handleUsernameChange}
+              onChange={handleUsernameChange}
               id="usernameInput"
               defaultValue="peduarte"
               className="col-span-3"
