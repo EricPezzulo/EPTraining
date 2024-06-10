@@ -13,17 +13,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PlusCircle } from "lucide-react";
 import React, { useRef, useState } from "react";
-import { users } from "../../../../mockDb";
-import { v4 as uuidv4 } from "uuid";
 import { DialogClose } from "@radix-ui/react-dialog";
 
 interface ChildProps {
-  setShouldFetch: React.Dispatch<React.SetStateAction<boolean>>
+  setShouldFetch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const DialogBox:React.FC<ChildProps> =({setShouldFetch}) => {
-  const [loading, setLoading] = useState<Boolean>(false);
-
+const DialogBox: React.FC<ChildProps> = ({ setShouldFetch }) => {
+  const [loading, setLoading] = useState<boolean>(false);
   const newClientInfo = useRef<{
     firstName: string;
     lastName: string;
@@ -49,24 +46,28 @@ const DialogBox:React.FC<ChildProps> =({setShouldFetch}) => {
     const dataToPost = {
       firstName: newClientInfo.current.firstName,
       lastName: newClientInfo.current.lastName,
+      username: newClientInfo.current.username,
     };
 
-    try{
-      const response = await fetch('../api/addClient', {
+    try {
+      const response = await fetch("/api/addClient", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(dataToPost)
-      }) 
-      if(!response.ok) {
-        throw new Error("Error posting data")
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dataToPost),
+      });
+      if (!response.ok) {
+        throw new Error("Error posting data");
       }
-      setShouldFetch((prev)=> !prev)
-      const result = await response.json()
-      console.log("Data posted successfully", result.data)
+      if (response.ok) {
+        console.log("HIT");
+      }
+      setShouldFetch((prev) => !prev);
+      const result = await response.json();
+      console.log("Data posted successfully", result.data);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -122,14 +123,14 @@ const DialogBox:React.FC<ChildProps> =({setShouldFetch}) => {
         </div>
         <DialogFooter>
           <DialogClose asChild>
-            <Button onClick={()=> addClient} type="button">
-              {loading ? "Adding...": "Add Client"}
+            <Button onClick={addClient} type="button">
+              {loading ? "Adding..." : "Add Client"}
             </Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
-}
+};
 
 export default DialogBox;

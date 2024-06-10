@@ -1,6 +1,5 @@
 "use client";
 import { usePathname } from "next/navigation";
-import { users } from "../../../../mockDb";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -124,28 +123,28 @@ type Client = {
 };
 export default function ClientPage() {
   const pathname = usePathname();
-  const id = pathname.split("/")[2];
+  const clientId = pathname.split("/")[2];
   const [user, setUser] = useState<User | null>(null);
   const [clientData, setClientData] = useState<Client | null>(null);
   const [sendData, setSendData] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (clientId:string) => {
       try {
-        const res = await fetch("http://localhost:3000/clients/api");
+        const res = await fetch(`/clients/[client]/api?clientId=${clientId}`);
         const data = await res.json();
-        setClientData(data);
+        setUser(data);
       } catch (error) {
         console.error("There was a problem fetching the data", error);
       }
     };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const foundUser = users.find((user) => user.clientId === id) || null;
-    if (foundUser) setUser(foundUser);
-  }, [user, id]);
+    fetchData(clientId);
+  }, [clientId]);
+// console.log(user)
+  // useEffect(() => {
+  //   const foundUser = users.find((user) => user.clientId === id) || null;
+  //   if (foundUser) setUser(foundUser);
+  // }, [user, id]);
 
   async function postRequest() {
     const res = fetch("http://localhost:3000/clients/api", {
@@ -155,7 +154,7 @@ export default function ClientPage() {
     });
   }
 
-  console.log(clientData);
+  // console.log(clientData);
   return (
     user && (
       <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -251,11 +250,11 @@ export default function ClientPage() {
                   className="overflow-hidden rounded-full"
                 >
                   <Image
-                    src="/placeholder-user.jpg"
+                    src={user?.clientPicture}
                     width={36}
                     height={36}
                     alt="Avatar"
-                    className="overflow-hidden rounded-full"
+                    className="overflow-hidden object-cover rounded-full"
                   />
                 </Button>
               </DropdownMenuTrigger>

@@ -64,14 +64,9 @@ import DialogBox from "../components/ui/dialog";
 import { User } from "./[client]/page";
 
 export default function Dashboard() {
-  const [newClientDialogBox, setNewClientDialogBox] = useState<boolean>(false);
   const [clientList, setClientList] = useState<User[]>([]);
   const [shouldFetch, setShouldFetch] = useState<boolean>(false);
-  // const [error, setError] = useState(null)
-  const toggleNewClientDialog = () => {
-    setNewClientDialogBox((prev) => !prev);
-    console.log(newClientDialogBox);
-  };
+
   useEffect(() => {
     const fetchClientList = async () => {
       try {
@@ -91,6 +86,25 @@ export default function Dashboard() {
     };
     fetchClientList();
   }, [shouldFetch]);
+
+  const deleteClient = async (clientId: string) => {
+    console.log(clientId)
+    try {
+      const res = await fetch("/clients/api/", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({clientId}),
+      });
+      if (!res.ok) {
+        throw new Error("Network response failed.");
+      }
+      const data = await res.json();
+      setClientList(data);
+      setShouldFetch((prev)=> !prev)
+    } catch (error) {
+      console.error("Could not delete client from database.", error);
+    }
+  };
 
   console.log(clientList);
   return (
@@ -191,7 +205,7 @@ export default function Dashboard() {
                     Export
                   </span>
                 </Button>
-                {/* <DialogBox setShouldFetch={setShouldFetch} /> */}
+                <DialogBox setShouldFetch={setShouldFetch} />
               </div>
             </div>
             <TabsContent value="all">
@@ -232,7 +246,9 @@ export default function Dashboard() {
                               alt="Product image"
                               className="aspect-square rounded-md object-cover"
                               height="64"
-                              src={client?.clientPicture || '/images/Ichigo.jpeg'}
+                              src={
+                                client?.clientPicture || "/images/Ichigo.jpeg"
+                              }
                               width="64"
                             />
                           </TableCell>
@@ -277,7 +293,11 @@ export default function Dashboard() {
                                   <DropdownMenuItem>Edit</DropdownMenuItem>
                                 </Link>
 
-                                <DropdownMenuItem>Delete</DropdownMenuItem>
+                                <DropdownMenuItem
+                                  onClick={() => deleteClient(client.clientId)}
+                                >
+                                  Delete
+                                </DropdownMenuItem>
                               </DropdownMenuContent>
                             </DropdownMenu>
                           </TableCell>
