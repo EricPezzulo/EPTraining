@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/shadcn-ui/button";
 import {
   Dialog,
   DialogContent,
@@ -8,9 +8,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from "@/components/shadcn-ui/dialog";
+import { Input } from "@/components/shadcn-ui/input";
+import { Label } from "@/components/shadcn-ui/label";
 import { PlusCircle } from "lucide-react";
 import React, { useRef, useState } from "react";
 import { DialogClose } from "@radix-ui/react-dialog";
@@ -19,7 +19,7 @@ interface ChildProps {
   setShouldFetch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const DialogBox: React.FC<ChildProps> = ({ setShouldFetch }) => {
+const AddClientDialogBox: React.FC<ChildProps> = ({ setShouldFetch }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const newClientInfo = useRef<{
     firstName: string;
@@ -133,4 +133,4 @@ const DialogBox: React.FC<ChildProps> = ({ setShouldFetch }) => {
   );
 };
 
-export default DialogBox;
+export default AddClientDialogBox;

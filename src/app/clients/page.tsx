@@ -2,24 +2,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  Divide,
-  Dumbbell,
   File,
-  Home,
-  LineChart,
   ListFilter,
   MoreHorizontal,
-  Package,
-  Package2,
-  PanelLeft,
-  PlusCircle,
   Search,
-  Settings,
-  ShoppingCart,
-  Users2,
 } from "lucide-react";
-
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/components/shadcn-ui/badge";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -27,8 +15,8 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
+} from "@/components/shadcn-ui/breadcrumb";
+import { Button } from "@/components/shadcn-ui/button";
 import {
   Card,
   CardContent,
@@ -36,7 +24,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/components/shadcn-ui/card";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -45,9 +33,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+} from "@/components/shadcn-ui/dropdown-menu";
+import { Input } from "@/components/shadcn-ui/input";
 import {
   Table,
   TableBody,
@@ -55,13 +42,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Sidebar from "../components/ui/sidebar";
-import { users } from "../../../mockDb";
+} from "@/components/shadcn-ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/shadcn-ui/tabs";
+import Sidebar from "../../components/custom-ui/Sidebar";
 import { useEffect, useState } from "react";
-import DialogBox from "../components/ui/dialog";
 import { User } from "./[client]/page";
+import AddClientDialogBox from "../../components/custom-ui/AddClientDialogBox";
 
 export default function Dashboard() {
   const [clientList, setClientList] = useState<User[]>([]);
@@ -81,14 +67,12 @@ export default function Dashboard() {
         setClientList(data);
       } catch (error) {
         console.error("Error fetching clients:", error);
-        // setError(error.message)
       }
     };
     fetchClientList();
   }, [shouldFetch]);
 
   const deleteClient = async (clientId: string) => {
-    console.log(clientId)
     try {
       const res = await fetch("/clients/api/", {
         method: "DELETE",
@@ -205,7 +189,7 @@ export default function Dashboard() {
                     Export
                   </span>
                 </Button>
-                <DialogBox setShouldFetch={setShouldFetch} />
+                <AddClientDialogBox setShouldFetch={setShouldFetch} />
               </div>
             </div>
             <TabsContent value="all">

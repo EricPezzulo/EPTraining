@@ -1,6 +1,6 @@
 import { IoIosAdd } from "react-icons/io";
 import { IoFilterOutline } from "react-icons/io5";
-import { users } from "../../../../mockDb";
+import { users } from "../../../mockDb";
 import ClientRow from "./ClientRow";
 
 const ClientTable = () => {

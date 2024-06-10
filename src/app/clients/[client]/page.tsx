@@ -18,7 +18,7 @@ import {
   Users2,
 } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/components/shadcn-ui/badge";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -26,8 +26,8 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
+} from "@/components/shadcn-ui/breadcrumb";
+import { Button } from "@/components/shadcn-ui/button";
 import {
   Card,
   CardContent,
@@ -35,7 +35,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/components/shadcn-ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -43,17 +43,17 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from "@/components/shadcn-ui/dropdown-menu";
+import { Input } from "@/components/shadcn-ui/input";
+import { Label } from "@/components/shadcn-ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+} from "@/components/shadcn-ui/select";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/shadcn-ui/sheet";
 import {
   Table,
   TableBody,
@@ -61,16 +61,16 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Textarea } from "@/components/ui/textarea";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+} from "@/components/shadcn-ui/table";
+import { Textarea } from "@/components/shadcn-ui/textarea";
+import { ToggleGroup, ToggleGroupItem } from "@/components/shadcn-ui/toggle-group";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/shadcn-ui/tooltip";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
-import Sidebar from "@/app/components/ui/sidebar";
+import Sidebar from "@/components/custom-ui/Sidebar";
 
 type Session = {
   sessionType: string;

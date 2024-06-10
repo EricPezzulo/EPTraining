@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { ProfileForm } from "./components/ui/form";
-import CardDemo from "./components/ui/card";
+import { SignInForm } from "../components/custom-ui/SignInForm";
+import { Card, CardContent, CardHeader } from "@/components/shadcn-ui/card";
+
 
 export default function Home() {
   return (
@@ -10,8 +11,12 @@ export default function Home() {
         <Link className="text-neutrual-800 font-medium" href="/clients/">
           Clients
         </Link>
-        <CardDemo>
-          <ProfileForm
+        <Card className='w-[380px]'>
+          <CardHeader>
+            Sign in
+          </CardHeader>
+          <CardContent>
+             <SignInForm
             usernamePlaceholder="johndoe@email.com"
             passwordPlaceholder="strongpassword!"
             usernameInputLabel="Username"
@@ -19,7 +24,11 @@ export default function Home() {
             buttonLabel="Sign in"
             // formDescription="test"
           />
-        </CardDemo>
+          </CardContent>
+         
+        </Card>
+          
+        {/* </CardDemo> */}
       </div>
     </main>
   );
