@@ -25,15 +25,15 @@ export async function DELETE(req: Request) {
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
     const { clientId } = await req.json();
-    console.log(req.body)
+    console.log(req.body);
     const { data, error } = await supabase
       .from("clients")
       .delete()
       .eq("clientId", clientId)
       .select();
-      if(error){
-        console.error('Error deleting client.', error)
-      }
+    if (error) {
+      console.error("Error deleting client.", error);
+    }
     return NextResponse.json(data);
   } catch (error) {
     console.error("Client could not be removed from database.", error);

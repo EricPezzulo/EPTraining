@@ -58,9 +58,7 @@ const AddClientDialogBox: React.FC<ChildProps> = ({ setShouldFetch }) => {
       if (!response.ok) {
         throw new Error("Error posting data");
       }
-      if (response.ok) {
-        console.log("HIT");
-      }
+
       setShouldFetch((prev) => !prev);
       const result = await response.json();
       console.log("Data posted successfully", result.data);

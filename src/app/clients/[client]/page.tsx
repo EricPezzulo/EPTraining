@@ -53,7 +53,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcn-ui/select";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/shadcn-ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/shadcn-ui/sheet";
 import {
   Table,
   TableBody,
@@ -63,7 +67,10 @@ import {
   TableRow,
 } from "@/components/shadcn-ui/table";
 import { Textarea } from "@/components/shadcn-ui/textarea";
-import { ToggleGroup, ToggleGroupItem } from "@/components/shadcn-ui/toggle-group";
+import {
+  ToggleGroup,
+  ToggleGroupItem,
+} from "@/components/shadcn-ui/toggle-group";
 import {
   Tooltip,
   TooltipContent,
@@ -71,6 +78,14 @@ import {
 } from "@/components/shadcn-ui/tooltip";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import Sidebar from "@/components/custom-ui/Sidebar";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/shadcn-ui/dialog";
+import { DialogDescription } from "@radix-ui/react-dialog";
 
 type Session = {
   sessionType: string;
@@ -129,7 +144,7 @@ export default function ClientPage() {
   const [sendData, setSendData] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchData = async (clientId:string) => {
+    const fetchData = async (clientId: string) => {
       try {
         const res = await fetch(`/clients/[client]/api?clientId=${clientId}`);
         const data = await res.json();
@@ -147,6 +162,9 @@ export default function ClientPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(sendData),
     });
+  }
+  async function handleRemoveClient() {
+    // const
   }
   return (
     user && (
@@ -189,11 +207,11 @@ export default function ClientPage() {
                   className="overflow-hidden rounded-full"
                 >
                   <Image
-                    src={user?.clientPicture|| '/images/Ichigo.jpeg'}
+                    src={user?.clientPicture || "/images/Ichigo.jpeg"}
                     width={36}
                     height={36}
                     alt="Avatar"
-                    className="overflow-hidden object-cover rounded-full"
+                    className="overflow-hidden rounded-full object-cover"
                   />
                 </Button>
               </DropdownMenuTrigger>
@@ -227,9 +245,29 @@ export default function ClientPage() {
                   {user?.activeClientStatus ? "Active" : "Inactive"}
                 </Badge>
                 <div className="hidden items-center gap-2 md:ml-auto md:flex">
-                  <Button variant="outline" size="sm">
-                    Remove
-                  </Button>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button size="sm">Remove</Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>
+                          Are you sure you want to remove {user?.firstName}{" "}
+                          {user?.lastName}?
+                        </DialogTitle>
+                        <DialogDescription>
+                          This action cannot be undone. This will permanently
+                          remove {user?.firstName} {user.lastName} from our
+                          servers.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="flex items-center space-x-2">
+                        <Button>Yes</Button>
+                        <Button>No</Button>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+
                   <Button size="sm">Save</Button>
                 </div>
               </div>

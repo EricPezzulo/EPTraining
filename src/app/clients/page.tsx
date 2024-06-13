@@ -1,12 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  File,
-  ListFilter,
-  MoreHorizontal,
-  Search,
-} from "lucide-react";
+import { File, ListFilter, MoreHorizontal, Search } from "lucide-react";
 import { Badge } from "@/components/shadcn-ui/badge";
 import {
   Breadcrumb,
@@ -43,11 +38,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/shadcn-ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/shadcn-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/shadcn-ui/tabs";
 import Sidebar from "../../components/custom-ui/Sidebar";
 import { useEffect, useState } from "react";
 import { User } from "./[client]/page";
 import AddClientDialogBox from "../../components/custom-ui/AddClientDialogBox";
+import { deleteClient } from "@/utils/helpers/deleteClients";
 
 export default function Dashboard() {
   const [clientList, setClientList] = useState<User[]>([]);
@@ -72,25 +73,16 @@ export default function Dashboard() {
     fetchClientList();
   }, [shouldFetch]);
 
-  const deleteClient = async (clientId: string) => {
+  const handleDelteClient = async (clientId: string) => {
     try {
-      const res = await fetch("/clients/api/", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({clientId}),
-      });
-      if (!res.ok) {
-        throw new Error("Network response failed.");
-      }
-      const data = await res.json();
-      setClientList(data);
-      setShouldFetch((prev)=> !prev)
+      const updatedClients = await deleteClient(clientId);
+      setClientList(updatedClients);
+      setShouldFetch((prev) => !prev);
     } catch (error) {
-      console.error("Could not delete client from database.", error);
+      console.error("Error deleting client", error);
     }
   };
 
-  console.log(clientList);
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <Sidebar />
@@ -278,7 +270,9 @@ export default function Dashboard() {
                                 </Link>
 
                                 <DropdownMenuItem
-                                  onClick={() => deleteClient(client.clientId)}
+                                  onClick={() =>
+                                    handleDelteClient(client.clientId)
+                                  }
                                 >
                                   Delete
                                 </DropdownMenuItem>
