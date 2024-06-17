@@ -1,6 +1,7 @@
 "use client";
+import {useRouter} from 'next/navigation'
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Context, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -86,7 +87,8 @@ import {
   DialogTrigger,
 } from "@/components/shadcn-ui/dialog";
 import { DialogDescription } from "@radix-ui/react-dialog";
-
+import { deleteClient } from "@/utils/helpers/deleteClient";
+import { notFound } from "next/navigation";
 type Session = {
   sessionType: string;
   sessionDate: string;
@@ -113,59 +115,59 @@ export type User = {
   clientPicture: string;
   clientId: string;
 };
-type Client = {
-  address: {
-    city: string;
-  };
-  geo: {
-    lat: string;
-    lng: string;
-  };
-  street: string;
-  suite: string;
-  zipcode: string;
-  company: {
-    bs: string;
-    catchPhrase: string;
-    name: string;
-  };
-  email: string;
-  id: number;
-  name: string;
-  phone: string;
-  username: string;
-  website: string;
-};
-export default function ClientPage() {
-  const pathname = usePathname();
-  const clientId = pathname.split("/")[2];
+
+interface Params {
+  client: string;
+}
+interface ClientPageProps {
+  params: Params;
+}
+
+const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [clientData, setClientData] = useState<Client | null>(null);
-  const [sendData, setSendData] = useState<string | null>(null);
+  const [clientRemoved, setClientRemoved] = useState<boolean>(false);
+  const clientId = params.client;
+  const router = useRouter()
 
   useEffect(() => {
     const fetchData = async (clientId: string) => {
       try {
         const res = await fetch(`/clients/[client]/api?clientId=${clientId}`);
+      
         const data = await res.json();
+        if(data.error){
+          return router.push('/404')
+        }
         setUser(data);
       } catch (error) {
         console.error("There was a problem fetching the data", error);
       }
     };
     fetchData(clientId);
-  }, [clientId]);
+    
+  }, [clientId, router]);
 
-  async function postRequest() {
-    const res = fetch("http://localhost:3000/clients/api", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(sendData),
-    });
+  const handleRemoveClient = async (clientId: string) => {
+    try {
+      const updatedClient = await deleteClient(clientId);
+      setClientRemoved(true);
+      // console.log(updatedClient);
+      setUser(updatedClient);
+      router.push('/clients')
+    } catch (error) {
+      console.error("Error deleting client", error);
+    }
+  };
+  if (clientRemoved) {
+    return (
+      user && (
+        <div>
+          {user.firstName} {user.lastName} has been removed
+        </div>
+      )
+    );
   }
-  async function handleRemoveClient() {
-    // const
-  }
+
   return (
     user && (
       <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -262,7 +264,12 @@ export default function ClientPage() {
                         </DialogDescription>
                       </DialogHeader>
                       <div className="flex items-center space-x-2">
-                        <Button>Yes</Button>
+                        <Button
+                          onClick={() => handleRemoveClient(user.clientId)}
+                        >
+                          Yes
+                        </Button>
+
                         <Button>No</Button>
                       </div>
                     </DialogContent>
@@ -608,4 +615,5 @@ export default function ClientPage() {
       </div>
     )
   );
-}
+};
+export default ClientPage;

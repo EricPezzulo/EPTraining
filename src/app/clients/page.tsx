@@ -48,7 +48,7 @@ import Sidebar from "../../components/custom-ui/Sidebar";
 import { useEffect, useState } from "react";
 import { User } from "./[client]/page";
 import AddClientDialogBox from "../../components/custom-ui/AddClientDialogBox";
-import { deleteClient } from "@/utils/helpers/deleteClients";
+import { deleteClient } from "@/utils/helpers/deleteClient";
 
 export default function Dashboard() {
   const [clientList, setClientList] = useState<User[]>([]);
