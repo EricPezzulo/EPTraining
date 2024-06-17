@@ -1,7 +1,6 @@
 "use client";
-import {useRouter} from 'next/navigation'
-import { usePathname } from "next/navigation";
-import { Context, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -101,6 +100,7 @@ export type User = {
   firstName: string;
   lastName: string;
   middleInitial: string;
+  description: string;
   age: number;
   DOB?: string | undefined;
   weight: number | null;
@@ -127,16 +127,17 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
   const [user, setUser] = useState<User | null>(null);
   const [clientRemoved, setClientRemoved] = useState<boolean>(false);
   const clientId = params.client;
-  const router = useRouter()
+  const router = useRouter();
+  const newPhoneNumber = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const fetchData = async (clientId: string) => {
       try {
         const res = await fetch(`/clients/[client]/api?clientId=${clientId}`);
-      
+
         const data = await res.json();
-        if(data.error){
-          return router.push('/404')
+        if (data.error) {
+          return router.push("/404");
         }
         setUser(data);
       } catch (error) {
@@ -144,7 +145,6 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
       }
     };
     fetchData(clientId);
-    
   }, [clientId, router]);
 
   const handleRemoveClient = async (clientId: string) => {
@@ -153,7 +153,7 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
       setClientRemoved(true);
       // console.log(updatedClient);
       setUser(updatedClient);
-      router.push('/clients')
+      router.push("/clients");
     } catch (error) {
       console.error("Error deleting client", error);
     }
@@ -167,6 +167,27 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
       )
     );
   }
+ const payload = {
+  // phoneNumber: newPhoneNumber,
+  firstName: "Bill", 
+  phoneNumber: newPhoneNumber
+ }
+ console.log(newPhoneNumber.current?.value)
+  const updateClientPhoneNumber = async () => {
+    // console.log(newPhoneNumber.current);
+    try {
+      const res = await fetch(`/clients/${clientId}/api?clientId=${clientId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({phoneNumber: newPhoneNumber.current?.value, firstName:"Billy"}),
+      });
+      if (!res.ok) {
+        console.error("There was an interal server error");
+      }
+    } catch (error) {
+      console.error("There was an issue updating the phone number.");
+    }
+  };
 
   return (
     user && (
@@ -283,9 +304,9 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                   <Card x-chunk="dashboard-07-chunk-0">
                     <CardHeader>
                       <CardTitle>Client Information</CardTitle>
-                      <CardDescription>
-                        Lipsum dolor sit amet, consectetur adipiscing elit
-                      </CardDescription>
+                      {/* <CardDescription>
+                        
+                      </CardDescription> */}
                     </CardHeader>
                     <CardContent>
                       <div className="grid gap-6">
@@ -299,13 +320,26 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                           />
                         </div>
                         <div className="grid gap-3">
+                          <Label htmlFor="phoneNumber">Phone Number</Label>
+                          <Input
+                            type="text"
+                            id="phoneNumber"
+                            ref={newPhoneNumber}
+                            className="w-full"
+                            defaultValue={user.phoneNumber || "(999)999-9999"}
+                          />
+                        </div>
+                        <div className="grid gap-3">
                           <Label htmlFor="description">Description</Label>
                           <Textarea
                             id="description"
-                            defaultValue="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl nec ultricies ultricies, nunc nisl ultricies nunc, nec ultricies nunc nisl nec nunc."
+                            defaultValue={user?.description}
                             className="min-h-32"
                           />
                         </div>
+                        <Button onClick={updateClientPhoneNumber}>
+                          Update
+                        </Button>
                       </div>
                     </CardContent>
                   </Card>
