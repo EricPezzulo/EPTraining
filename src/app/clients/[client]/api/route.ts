@@ -34,8 +34,10 @@ export async function PUT(req: Request) {
   try {
     const url = new URL(req.url);
     const clientId = url.searchParams.get("clientId");
-    const {phoneNumber, firstName} = await req.json()
-    console.log(phoneNumber, firstName)
+    const { phoneNumber, name, description } = await req.json();
+    const firstName = name.split(" ")[0];
+    const lastName = name.split(" ")[1];
+    console.log(phoneNumber, name, description);
     if (!phoneNumber) {
       return NextResponse.json({ error: "No phone number received." });
     }
@@ -43,7 +45,7 @@ export async function PUT(req: Request) {
     const supabase = createClient(cookieStore);
     const { data, error } = await supabase
       .from("clients")
-      .update({ phoneNumber: phoneNumber })
+      .update({ phoneNumber, firstName, lastName, description })
       .eq("clientId", clientId);
     if (error) {
       console.error(

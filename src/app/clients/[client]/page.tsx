@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -53,11 +53,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcn-ui/select";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/shadcn-ui/sheet";
+
 import {
   Table,
   TableBody,
@@ -122,16 +118,24 @@ interface Params {
 interface ClientPageProps {
   params: Params;
 }
-
+type ClientRefType = {
+  phoneNumber: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  description: string | null;
+};
 const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
   const [user, setUser] = useState<User | null>(null);
   const [clientRemoved, setClientRemoved] = useState<boolean>(false);
   const clientId = params.client;
   const router = useRouter();
-  const newPhoneNumber = useRef<HTMLInputElement>(null);
+  const phoneNumber = useRef<HTMLInputElement>(null);
+  const name = useRef<HTMLInputElement>(null);
+  const description = useRef<HTMLTextAreaElement>(null);
+  const [activeStatus, setActiveStatus] = useState<boolean | null>(null);
 
-  useEffect(() => {
-    const fetchData = async (clientId: string) => {
+  const fetchData = useCallback(
+    async (clientId: string) => {
       try {
         const res = await fetch(`/clients/[client]/api?clientId=${clientId}`);
 
@@ -140,18 +144,26 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
           return router.push("/404");
         }
         setUser(data);
+
+        if (name.current)
+          name.current.value = `${data.firstName} ${data.lastName}`;
+        if (phoneNumber.current) phoneNumber.current.value = data.phoneNumber;
+        if (description.current) description.current.value = data.description;
       } catch (error) {
         console.error("There was a problem fetching the data", error);
       }
-    };
+    },
+    [router],
+  );
+
+  useEffect(() => {
     fetchData(clientId);
-  }, [clientId, router]);
+  }, [clientId, fetchData]);
 
   const handleRemoveClient = async (clientId: string) => {
     try {
       const updatedClient = await deleteClient(clientId);
       setClientRemoved(true);
-      // console.log(updatedClient);
       setUser(updatedClient);
       router.push("/clients");
     } catch (error) {
@@ -167,28 +179,32 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
       )
     );
   }
- const payload = {
-  // phoneNumber: newPhoneNumber,
-  firstName: "Bill", 
-  phoneNumber: newPhoneNumber
- }
- console.log(newPhoneNumber.current?.value)
-  const updateClientPhoneNumber = async () => {
-    // console.log(newPhoneNumber.current);
+
+  const updateClientInfo = async () => {
     try {
       const res = await fetch(`/clients/${clientId}/api?clientId=${clientId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({phoneNumber: newPhoneNumber.current?.value, firstName:"Billy"}),
+        body: JSON.stringify({
+          phoneNumber: phoneNumber.current?.value,
+          name: name.current?.value,
+          description: description.current?.value,
+        }),
       });
+
       if (!res.ok) {
         console.error("There was an interal server error");
       }
+      fetchData(clientId);
     } catch (error) {
       console.error("There was an issue updating the phone number.");
     }
   };
-
+  const handleClientActiveStatusChange = async (
+    e: FormEvent<HTMLFormElement>,
+  ) => {
+    // write PUT req to update DB
+  };
   return (
     user && (
       <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -316,6 +332,7 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                             id="name"
                             type="text"
                             className="w-full"
+                            ref={name}
                             defaultValue={`${user.firstName} ${user.lastName}`}
                           />
                         </div>
@@ -324,7 +341,7 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                           <Input
                             type="text"
                             id="phoneNumber"
-                            ref={newPhoneNumber}
+                            ref={phoneNumber}
                             className="w-full"
                             defaultValue={user.phoneNumber || "(999)999-9999"}
                           />
@@ -333,13 +350,12 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                           <Label htmlFor="description">Description</Label>
                           <Textarea
                             id="description"
+                            ref={description}
                             defaultValue={user?.description}
                             className="min-h-32"
                           />
                         </div>
-                        <Button onClick={updateClientPhoneNumber}>
-                          Update
-                        </Button>
+                        <Button onClick={updateClientInfo}>Update</Button>
                       </div>
                     </CardContent>
                   </Card>
@@ -494,7 +510,7 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                             alt="Product image"
                             className="aspect-square w-full rounded-md object-cover"
                             height="300"
-                            src="/placeholder.svg"
+                            src="/placeholder.jpeg"
                             width="300"
                           />
                           <div className="grid grid-cols-3 gap-2">
@@ -503,7 +519,7 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                                 alt="Product image"
                                 className="aspect-square w-full rounded-md object-cover"
                                 height="84"
-                                src="/placeholder.svg"
+                                src="/placeholder.jpeg"
                                 width="84"
                               />
                             </button>
@@ -512,7 +528,7 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                                 alt="Product image"
                                 className="aspect-square w-full rounded-md object-cover"
                                 height="84"
-                                src="/placeholder.svg"
+                                src="/placeholder.jpeg"
                                 width="84"
                               />
                             </button>
@@ -529,7 +545,7 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                 <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
                   <Card x-chunk="dashboard-07-chunk-3">
                     <CardHeader>
-                      <CardTitle>Product Status</CardTitle>
+                      <CardTitle>Active Status</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="grid gap-6">
@@ -540,12 +556,22 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                               id="status"
                               aria-label="Select status"
                             >
-                              <SelectValue placeholder="Select status" />
+                              <SelectValue
+                                placeholder={
+                                  user.activeClientStatus === true
+                                    ? "Active"
+                                    : "Inactive"
+                                }
+                              />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="draft">Draft</SelectItem>
-                              <SelectItem value="published">Active</SelectItem>
-                              <SelectItem value="archived">Archived</SelectItem>
+                              <SelectItem
+                                onSubmit={handleClientActiveStatusChange}
+                                value="true"
+                              >
+                                Active
+                              </SelectItem>
+                              <SelectItem value="false">Inactive</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
@@ -568,7 +594,7 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                           alt="Product image"
                           className="aspect-square w-full rounded-md object-cover"
                           height="300"
-                          src="/placeholder.svg"
+                          src="/placeholder.jpeg"
                           width="300"
                         />
                         <div className="grid grid-cols-3 gap-2">
@@ -577,7 +603,7 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                               alt="Product image"
                               className="aspect-square w-full rounded-md object-cover"
                               height="84"
-                              src="/placeholder.svg"
+                              src="/placeholder.jpeg"
                               width="84"
                             />
                           </button>
@@ -586,7 +612,7 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                               alt="Product image"
                               className="aspect-square w-full rounded-md object-cover"
                               height="84"
-                              src="/placeholder.svg"
+                              src="/placeholder.jpeg"
                               width="84"
                             />
                           </button>
