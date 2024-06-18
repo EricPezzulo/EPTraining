@@ -551,7 +551,11 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                       <div className="grid gap-6">
                         <div className="grid gap-3">
                           <Label htmlFor="status">Status</Label>
-                          <Select>
+                          <Select
+                            onValueChange={(e) =>
+                              handleClientActiveStatusChange
+                            }
+                          >
                             <SelectTrigger
                               id="status"
                               aria-label="Select status"
@@ -565,12 +569,7 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                               />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem
-                                onSubmit={handleClientActiveStatusChange}
-                                value="true"
-                              >
-                                Active
-                              </SelectItem>
+                              <SelectItem value="true">Active</SelectItem>
                               <SelectItem value="false">Inactive</SelectItem>
                             </SelectContent>
                           </Select>
