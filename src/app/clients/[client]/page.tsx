@@ -139,7 +139,7 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
   const phoneNumber = useRef<HTMLInputElement>(null);
   const name = useRef<HTMLInputElement>(null);
   const description = useRef<HTMLTextAreaElement>(null);
-  const [activeStatus, setActiveStatus] = useState<boolean>(false);
+  const [activeStatus, setActiveStatus] = useState<boolean | null>(null);
 
   const fetchData = useCallback(
     async (clientId: string) => {
@@ -209,22 +209,23 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
     }
   };
   const handleClientActiveStatusChange = async (newValue: string) => {
-    // bug where you need to change the status twice before it changes the state.
-    // when page loads, active client status is null, and sends null to the server even without this function executing
+    // declare a new variable to send to the server, this is because state changes are asynchronous so the value might not me updated immedafly when trying to access it after updating that
+    // still use state variable to trigger the page 
 
+    let updatedStatus =null;
     if (newValue === "true") {
+      updatedStatus = true
+      setActiveStatus(true);
+    } else if (newValue === "false") {
+      updatedStatus = false
       setActiveStatus(false);
     }
-    if (newValue === "false") {
-      setActiveStatus(true);
-    }
-    console.log(activeStatus);
     try {
       // console.log(activeStatus);
       const res = await fetch(`/clients/${clientId}/api/changeActiveStatus`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ activeClientStatus: activeStatus, clientId }),
+        body: JSON.stringify({ activeClientStatus: updatedStatus, clientId }),
       });
       if (!res.ok) {
         console.error("There was an issue sending the request");
@@ -233,7 +234,6 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
       console.error("There was an internal server error", error);
     }
   };
-  // console.log(activeStatus);
   if (user === null) {
     return <div>loading...</div>;
   }
