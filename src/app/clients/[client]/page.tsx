@@ -149,6 +149,7 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
           name.current.value = `${data.firstName} ${data.lastName}`;
         if (phoneNumber.current) phoneNumber.current.value = data.phoneNumber;
         if (description.current) description.current.value = data.description;
+        setActiveStatus(data.activeClientStatus)
       } catch (error) {
         console.error("There was a problem fetching the data", error);
       }
@@ -203,7 +204,25 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
   const handleClientActiveStatusChange = async (
     e: FormEvent<HTMLFormElement>,
   ) => {
-    // write PUT req to update DB
+    if(user?.activeClientStatus === true) {
+      setActiveStatus(false)
+    } else {
+      setActiveStatus(true)
+    }
+
+    console.log(activeStatus)
+      try {
+        const res = await fetch(`/clients/${clientId}/api/changeActiveStatus?clientId=${clientId}`, {
+          method:"PUT",
+          headers: {"Content-Type":"application/json"},
+          body: JSON.stringify(activeStatus)
+        }) 
+        if(!res.ok){
+          console.error("There was an issue sending the request")
+        }
+      } catch(error){
+        console.error("There was an internal server error", error);
+      }
   };
   return (
     user && (
@@ -552,7 +571,7 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                         <div className="grid gap-3">
                           <Label htmlFor="status">Status</Label>
                           <Select
-                            onValueChange={(e) =>
+                            onValueChange={() =>
                               handleClientActiveStatusChange
                             }
                           >
