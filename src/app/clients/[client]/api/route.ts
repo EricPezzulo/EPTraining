@@ -42,6 +42,9 @@ export async function PUT(req: Request) {
       height,
       weight,
       bodyFatPercentage,
+      clientEmail,
+      age,
+      DOB,
     } = await req.json();
     const firstName = name.split(" ")[0];
     const lastName = name.split(" ")[1];
@@ -54,6 +57,9 @@ export async function PUT(req: Request) {
       height,
       weight,
       bodyFatPercentage,
+      age,
+      clientEmail,
+      DOB,
     );
     if (!phoneNumber) {
       return NextResponse.json({ error: "No pclient information received." });
@@ -71,6 +77,9 @@ export async function PUT(req: Request) {
         bodyFatPercentage,
         weight,
         height,
+        age,
+        clientEmail,
+        DOB,
       })
       .eq("clientId", clientId);
     if (error) {

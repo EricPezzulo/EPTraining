@@ -104,6 +104,7 @@ export type User = {
   lastName: string;
   middleInitial: string;
   description: string;
+  clientEmail: string | null;
   age: number | null;
   DOB?: string | undefined;
   bodyFatPercentage: number | null;
@@ -126,12 +127,12 @@ interface Params {
 interface ClientPageProps {
   params: Params;
 }
-type ClientRefType = {
-  phoneNumber: string | null;
-  firstName: string | null;
-  lastName: string | null;
-  description: string | null;
-};
+// type ClientRefType = {
+//   phoneNumber: string | null;
+//   firstName: string | null;
+//   lastName: string | null;
+//   description: string | null;
+// };
 const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
   const [client, setClient] = useState<User | null>(null);
   const [clientRemoved, setClientRemoved] = useState<boolean>(false);
@@ -141,11 +142,13 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
   const name = useRef<HTMLInputElement>(null);
   const description = useRef<HTMLTextAreaElement>(null);
   const [activeStatus, setActiveStatus] = useState<boolean | null>(null);
-  const updatedStatus = useRef<boolean | null>(null);
+  const updatedStatus = useRef<boolean | null>(true);
   const weight = useRef<HTMLInputElement>(null);
   const height = useRef<HTMLInputElement>(null);
   const bodyFatPercentage = useRef<HTMLInputElement>(null);
-
+  const clientEmail = useRef<HTMLInputElement>(null);
+  const age = useRef<HTMLInputElement>(null);
+  const DOB = useRef<HTMLInputElement>(null);
   const fetchData = useCallback(
     async (clientId: string) => {
       try {
@@ -163,9 +166,12 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
         if (description.current) description.current.value = data.description;
         if (weight.current) weight.current.value = data.weight;
         if (height.current) height.current.value = data.height;
+        if (age.current) age.current.value = data.age;
+        if(DOB.current) DOB.current.value = data.DOB;
         if (bodyFatPercentage.current) {
           bodyFatPercentage.current.value = data.bodyFatPercentage;
         }
+        if (clientEmail.current) clientEmail.current.value = data.clientEmail;
 
         setActiveStatus(data.activeClientStatus);
       } catch (error) {
@@ -213,6 +219,10 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
           weight: weight.current?.value,
           bodyFatPercentage: bodyFatPercentage.current?.value,
           clientId,
+          age: age.current?.value,
+          clientEmail: clientEmail.current?.value,
+          DOB: DOB.current?.value
+          
         }),
       });
 
@@ -238,6 +248,7 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
   if (client === null) {
     return <div>loading...</div>;
   }
+  console.log(client)
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <Sidebar />
@@ -372,14 +383,24 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                         />
                       </div>
                       <div className="grid gap-3">
-                        <Label htmlFor="phoneNumber">Phone Number</Label>
+                        <Label htmlFor="client-email">Email</Label>
                         <Input
                           type="text"
-                          id="phoneNumber"
-                          ref={phoneNumber}
+                          id="client-email"
+                          ref={clientEmail}
                           className="w-full"
-                          defaultValue={client.phoneNumber || "(999)999-9999"}
+                          defaultValue={client.clientEmail || "(999)999-9999"}
                         />
+                      </div>
+                      <div className=' grid gap-3'>
+                           <Label htmlFor="phoneNumber">Phone Number</Label>
+                          <Input
+                            type="text"
+                            id="phoneNumber"
+                            ref={phoneNumber}
+                            className="w-fill"
+                            defaultValue={client.phoneNumber?.toString()}
+                          />
                       </div>
                       <div className="grid gap-3">
                         <Label htmlFor="description">Description</Label>
@@ -389,6 +410,31 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                           defaultValue={client?.description}
                           className="min-h-32"
                         />
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <Label htmlFor="client-age">Age</Label>
+                          <Input
+                            type="text"
+                            id="client-age"
+                            ref={age}
+                            className="w-fill"
+                            // defaultValue='Hi'
+                            placeholder="0"
+                            // defaultValue={age.current === null ? "unknown" : client.age?.toString()}
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="dob">Date Of Birth</Label>
+                          <Input
+                            type="text"
+                            id="dob"
+                            ref={DOB}
+                            className="w-fill"
+                            placeholder="YYYY/MM?DD"
+                            defaultValue={client.DOB}
+                          />
+                        </div>
                       </div>
                       {/* <Button onClick={updateClientInfo}>Update</Button> */}
                     </div>
@@ -446,7 +492,7 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                       <div className="grid gap-3">
                         <Label htmlFor="status">Status</Label>
                         <Select
-                          defaultValue={client.activeClientStatus.toString()}
+                          defaultValue={client.activeClientStatus?.toString()}
                           onValueChange={handleClientActiveStatusChange}
                         >
                           <SelectTrigger id="status" aria-label="Select status">
