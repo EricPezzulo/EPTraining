@@ -33,28 +33,54 @@ export async function GET(req: Request) {
 export async function PUT(req: Request) {
   try {
     const url = new URL(req.url);
-    const clientId = url.searchParams.get("clientId");
-    const { phoneNumber, name, description } = await req.json();
+    const {
+      phoneNumber,
+      name,
+      description,
+      clientId,
+      activeClientStatus,
+      height,
+      weight,
+      bodyFatPercentage,
+    } = await req.json();
     const firstName = name.split(" ")[0];
     const lastName = name.split(" ")[1];
-    console.log(phoneNumber, name, description);
+    console.log(
+      phoneNumber,
+      name,
+      description,
+      clientId,
+      activeClientStatus,
+      height,
+      weight,
+      bodyFatPercentage,
+    );
     if (!phoneNumber) {
-      return NextResponse.json({ error: "No phone number received." });
+      return NextResponse.json({ error: "No pclient information received." });
     }
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("clients")
-      .update({ phoneNumber, firstName, lastName, description })
+      .update({
+        phoneNumber,
+        firstName,
+        lastName,
+        description,
+        activeClientStatus,
+        bodyFatPercentage,
+        weight,
+        height,
+      })
       .eq("clientId", clientId);
     if (error) {
       console.error(
-        "there was a issue updating the phone number in the database",
+        "There was a issue updating the client information in the database.",
         error,
       );
     }
     return NextResponse.json({
-      ok: "client phone number has been updated.",
+      ok: "Client information has been updated.",
       status: 201,
     });
   } catch (error) {

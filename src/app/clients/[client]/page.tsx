@@ -104,11 +104,12 @@ export type User = {
   lastName: string;
   middleInitial: string;
   description: string;
-  age: number;
+  age: number | null;
   DOB?: string | undefined;
+  bodyFatPercentage: number | null;
   weight: number | null;
-  height: string;
-  phoneNumber: string;
+  height: string | null;
+  phoneNumber: string | null;
   activeClientStatus: boolean;
   nextSession: string | null;
   currentPTM: string;
@@ -132,7 +133,7 @@ type ClientRefType = {
   description: string | null;
 };
 const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [client, setClient] = useState<User | null>(null);
   const [clientRemoved, setClientRemoved] = useState<boolean>(false);
   const clientId = params.client;
   const router = useRouter();
@@ -140,6 +141,10 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
   const name = useRef<HTMLInputElement>(null);
   const description = useRef<HTMLTextAreaElement>(null);
   const [activeStatus, setActiveStatus] = useState<boolean | null>(null);
+  const updatedStatus = useRef<boolean | null>(null);
+  const weight = useRef<HTMLInputElement>(null);
+  const height = useRef<HTMLInputElement>(null);
+  const bodyFatPercentage = useRef<HTMLInputElement>(null);
 
   const fetchData = useCallback(
     async (clientId: string) => {
@@ -150,12 +155,18 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
         if (data.error) {
           return router.push("/404");
         }
-        setUser(data);
+        setClient(data);
 
         if (name.current)
           name.current.value = `${data.firstName} ${data.lastName}`;
         if (phoneNumber.current) phoneNumber.current.value = data.phoneNumber;
         if (description.current) description.current.value = data.description;
+        if (weight.current) weight.current.value = data.weight;
+        if (height.current) height.current.value = data.height;
+        if (bodyFatPercentage.current) {
+          bodyFatPercentage.current.value = data.bodyFatPercentage;
+        }
+
         setActiveStatus(data.activeClientStatus);
       } catch (error) {
         console.error("There was a problem fetching the data", error);
@@ -172,7 +183,7 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
     try {
       const updatedClient = await deleteClient(clientId);
       setClientRemoved(true);
-      setUser(updatedClient);
+      setClient(updatedClient);
       router.push("/clients");
     } catch (error) {
       console.error("Error deleting client", error);
@@ -180,9 +191,9 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
   };
   if (clientRemoved) {
     return (
-      user && (
+      client && (
         <div>
-          {user.firstName} {user.lastName} has been removed
+          {client.firstName} {client.lastName} has been removed
         </div>
       )
     );
@@ -190,13 +201,18 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
 
   const updateClientInfo = async () => {
     try {
-      const res = await fetch(`/clients/${clientId}/api?clientId=${clientId}`, {
+      const res = await fetch(`/clients/${clientId}/api`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           phoneNumber: phoneNumber.current?.value,
           name: name.current?.value,
           description: description.current?.value,
+          activeClientStatus: updatedStatus.current,
+          height: height.current?.value,
+          weight: weight.current?.value,
+          bodyFatPercentage: bodyFatPercentage.current?.value,
+          clientId,
         }),
       });
 
@@ -209,32 +225,17 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
     }
   };
   const handleClientActiveStatusChange = async (newValue: string) => {
-    // declare a new variable to send to the server, this is because state changes are asynchronous so the value might not me updated immedafly when trying to access it after updating that
-    // still use state variable to trigger the page 
-
-    let updatedStatus =null;
     if (newValue === "true") {
-      updatedStatus = true
+      updatedStatus.current = true;
       setActiveStatus(true);
     } else if (newValue === "false") {
-      updatedStatus = false
+      updatedStatus.current = false;
       setActiveStatus(false);
     }
-    try {
-      // console.log(activeStatus);
-      const res = await fetch(`/clients/${clientId}/api/changeActiveStatus`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ activeClientStatus: updatedStatus, clientId }),
-      });
-      if (!res.ok) {
-        console.error("There was an issue sending the request");
-      }
-    } catch (error) {
-      console.error("There was an internal server error", error);
-    }
   };
-  if (user === null) {
+
+  // add loading skeleton here
+  if (client === null) {
     return <div>loading...</div>;
   }
   return (
@@ -257,7 +258,7 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage>{`${user.firstName} ${user.lastName}`}</BreadcrumbPage>
+                <BreadcrumbPage>{`${client.firstName} ${client.lastName}`}</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
@@ -277,7 +278,7 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                 className="overflow-hidden rounded-full"
               >
                 <Image
-                  src={user?.clientPicture || "/images/Ichigo.jpeg"}
+                  src={client?.clientPicture || "/images/Ichigo.jpeg"}
                   width={36}
                   height={36}
                   alt="Avatar"
@@ -306,7 +307,7 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
               </Link>
 
               <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-                {user.firstName} {user.lastName}
+                {client.firstName} {client.lastName}
               </h1>
               <Badge
                 variant={activeStatus ? "outline" : "secondary"}
@@ -322,17 +323,19 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                   <DialogContent>
                     <DialogHeader>
                       <DialogTitle>
-                        Are you sure you want to remove {user.firstName}{" "}
-                        {user.lastName}?
+                        Are you sure you want to remove {client.firstName}{" "}
+                        {client.lastName}?
                       </DialogTitle>
                       <DialogDescription>
                         This action cannot be undone. This will permanently
-                        remove {user.firstName} {user.lastName} from our
+                        remove {client.firstName} {client.lastName} from our
                         servers.
                       </DialogDescription>
                     </DialogHeader>
                     <div className="flex items-center space-x-2">
-                      <Button onClick={() => handleRemoveClient(user.clientId)}>
+                      <Button
+                        onClick={() => handleRemoveClient(client.clientId)}
+                      >
                         Yes
                       </Button>
 
@@ -341,7 +344,9 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                   </DialogContent>
                 </Dialog>
 
-                <Button size="sm">Save</Button>
+                <Button size="sm" onClick={updateClientInfo}>
+                  Save
+                </Button>
               </div>
             </div>
             <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
@@ -349,9 +354,10 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                 <Card x-chunk="dashboard-07-chunk-0">
                   <CardHeader>
                     <CardTitle>Client Information</CardTitle>
-                    {/* <CardDescription>
-                        
-                      </CardDescription> */}
+                    <CardDescription>
+                      Name, contact information, and a goal or short
+                      description.
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="grid gap-6">
@@ -362,7 +368,7 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                           type="text"
                           className="w-full"
                           ref={name}
-                          defaultValue={`${user.firstName} ${user.lastName}`}
+                          defaultValue={`${client.firstName} ${client.lastName}`}
                         />
                       </div>
                       <div className="grid gap-3">
@@ -372,7 +378,7 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                           id="phoneNumber"
                           ref={phoneNumber}
                           className="w-full"
-                          defaultValue={user.phoneNumber || "(999)999-9999"}
+                          defaultValue={client.phoneNumber || "(999)999-9999"}
                         />
                       </div>
                       <div className="grid gap-3">
@@ -380,11 +386,52 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                         <Textarea
                           id="description"
                           ref={description}
-                          defaultValue={user?.description}
+                          defaultValue={client?.description}
                           className="min-h-32"
                         />
                       </div>
-                      <Button onClick={updateClientInfo}>Update</Button>
+                      {/* <Button onClick={updateClientInfo}>Update</Button> */}
+                    </div>
+                  </CardContent>
+                </Card>{" "}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Client Stats</CardTitle>
+                  </CardHeader>{" "}
+                  <CardContent>
+                    <div className="grid gap-6">
+                      <div className="grid gap-3">
+                        <Label htmlFor="client-weight">Body Weight</Label>
+                        <Input
+                          ref={weight}
+                          defaultValue={client.weight?.toString()}
+                          id="client-weight"
+                          type="text"
+                          className="w-full"
+                        />
+                      </div>
+                      <div className="grid gap-3">
+                        <Label htmlFor="client-height">Height</Label>
+                        <Input
+                          ref={height}
+                          defaultValue={client.height?.toString() || "0"}
+                          className="w-full"
+                          id="client-height"
+                          type="text"
+                        />
+                      </div>
+                      <div className="grid gap-3">
+                        <Label htmlFor="bf%">Body Fat Percentage</Label>
+                        <Input
+                          defaultValue={
+                            client.bodyFatPercentage?.toString() || "0"
+                          }
+                          ref={bodyFatPercentage}
+                          className="w-full"
+                          id="bf%"
+                          type="text"
+                        />
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -399,13 +446,13 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                       <div className="grid gap-3">
                         <Label htmlFor="status">Status</Label>
                         <Select
-                          defaultValue={user.activeClientStatus.toString()}
+                          defaultValue={client.activeClientStatus.toString()}
                           onValueChange={handleClientActiveStatusChange}
                         >
                           <SelectTrigger id="status" aria-label="Select status">
                             <SelectValue
                               placeholder={
-                                user.activeClientStatus === true
+                                client.activeClientStatus === true
                                   ? "Active"
                                   : "Inactive"
                               }
@@ -423,15 +470,15 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
 
                 <Card x-chunk="dashboard-07-chunk-5">
                   <CardHeader>
-                    <CardTitle>Archive Product</CardTitle>
+                    <CardTitle>Client Progress Pictures</CardTitle>
                     <CardDescription>
-                      Lipsum dolor sit amet, consectetur adipiscing elit.
+                      Progress pictures are a great way to track visable changes
+                      over time.
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div></div>
                     <Button size="sm" variant="secondary">
-                      Archive Product
+                      Upload Picture
                     </Button>
                   </CardContent>
                 </Card>

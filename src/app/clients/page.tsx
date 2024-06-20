@@ -266,7 +266,7 @@ export default function Dashboard() {
                               <DropdownMenuContent align="end">
                                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                 <Link href={`/clients/${client.clientId}`}>
-                                  <DropdownMenuItem>Edit</DropdownMenuItem>
+                                  <DropdownMenuItem>View</DropdownMenuItem>
                                 </Link>
 
                                 <DropdownMenuItem
