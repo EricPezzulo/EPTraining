@@ -149,6 +149,8 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
   const clientEmail = useRef<HTMLInputElement>(null);
   const age = useRef<HTMLInputElement>(null);
   const DOB = useRef<HTMLInputElement>(null);
+  const displayDate = useRef<HTMLInputElement>(null);
+  const dbSendDate = useRef<string>(null);
   const fetchData = useCallback(
     async (clientId: string) => {
       try {
@@ -160,6 +162,8 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
         }
         setClient(data);
 
+        // if (displayDate.current)
+        //   displayDate.current.value = convertDateToDisplayFormat(data.DOB);
         if (name.current)
           name.current.value = `${data.firstName} ${data.lastName}`;
         if (phoneNumber.current) phoneNumber.current.value = data.phoneNumber;
@@ -167,7 +171,7 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
         if (weight.current) weight.current.value = data.weight;
         if (height.current) height.current.value = data.height;
         if (age.current) age.current.value = data.age;
-        if(DOB.current) DOB.current.value = data.DOB;
+        if (DOB.current) DOB.current.value = data.DOB;
         if (bodyFatPercentage.current) {
           bodyFatPercentage.current.value = data.bodyFatPercentage;
         }
@@ -221,8 +225,7 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
           clientId,
           age: age.current?.value,
           clientEmail: clientEmail.current?.value,
-          DOB: DOB.current?.value
-          
+          DOB: dbSendDate.current,
         }),
       });
 
@@ -248,7 +251,19 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
   if (client === null) {
     return <div>loading...</div>;
   }
-  console.log(client)
+
+  const convertDateToDisplayFormat = (dateString: string) => {
+    const [year, month, day] = dateString.split("-");
+    return `${month}-${day}-${year}`;
+  };
+  const convertDateToDbFormat = (dateString: string) => {
+    const [month, day, year] = dateString.split("-");
+    return `${year}-${month}-${day}`;
+  };
+  if (displayDate.current && client.DOB)
+    displayDate.current.value = convertDateToDisplayFormat(client.DOB);
+  // TODO: figure out how to send back the YYYY/MM/DD format to the db  when updating.
+  console.log(dbSendDate);
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <Sidebar />
@@ -392,15 +407,15 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                           defaultValue={client.clientEmail || "(999)999-9999"}
                         />
                       </div>
-                      <div className=' grid gap-3'>
-                           <Label htmlFor="phoneNumber">Phone Number</Label>
-                          <Input
-                            type="text"
-                            id="phoneNumber"
-                            ref={phoneNumber}
-                            className="w-fill"
-                            defaultValue={client.phoneNumber?.toString()}
-                          />
+                      <div className=" grid gap-3">
+                        <Label htmlFor="phoneNumber">Phone Number</Label>
+                        <Input
+                          type="text"
+                          id="phoneNumber"
+                          ref={phoneNumber}
+                          className="w-fill"
+                          defaultValue={client.phoneNumber?.toString()}
+                        />
                       </div>
                       <div className="grid gap-3">
                         <Label htmlFor="description">Description</Label>
@@ -429,10 +444,10 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                           <Input
                             type="text"
                             id="dob"
-                            ref={DOB}
+                            ref={displayDate}
                             className="w-fill"
-                            placeholder="YYYY/MM?DD"
-                            defaultValue={client.DOB}
+                            placeholder="MM/DD/YYYY"
+                            // defaultValue={displayDate}
                           />
                         </div>
                       </div>
