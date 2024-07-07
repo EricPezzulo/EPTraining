@@ -460,6 +460,7 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                           />
                         </div>
                       </div>
+                      </div>
                       {/* <Button onClick={updateClientInfo}>Update</Button> */}
                     </div>
                   </CardContent>
