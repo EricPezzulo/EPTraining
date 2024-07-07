@@ -416,6 +416,15 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                           className="w-fill"
                           defaultValue={client.phoneNumber?.toString()}
                         />
+                      <div className=" grid gap-3">
+                        <Label htmlFor="phoneNumber">Phone Number</Label>
+                        <Input
+                          type="text"
+                          id="phoneNumber"
+                          ref={phoneNumber}
+                          className="w-fill"
+                          defaultValue={client.phoneNumber?.toString()}
+                        />
                       </div>
                       <div className="grid gap-3">
                         <Label htmlFor="description">Description</Label>
@@ -446,8 +455,8 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                             id="dob"
                             ref={displayDate}
                             className="w-fill"
-                            placeholder="MM/DD/YYYY"
-                            // defaultValue={displayDate}
+                            placeholder="YYYY/MM/DD"
+                            defaultValue={client.DOB}
                           />
                         </div>
                       </div>
@@ -493,6 +502,29 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                           type="text"
                         />
                       </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Workout Program</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div>
+                    <button type='button' className='rounded-md justify-start flex flex-col p-5 border-2 border-slate-100'>
+                        <p>Date: 7/12/24</p>
+                        <p>Time: N/A</p>
+                        <div className="flex">
+                          <p className="w-auto">PT Session: </p>
+                          <p className="w-auto">No</p>
+                        </div>
+                        <div className='flex flex-col items-start'>
+                          <p>Barbell Bench Press 3x10</p>
+                          <p>Back Squat 3x6</p>
+                          <p>Preacher Curls 3x10</p>
+                          <p>OverHead Shoulder Press 2x8</p>
+                        </div>
+                      </button>
                     </div>
                   </CardContent>
                 </Card>
