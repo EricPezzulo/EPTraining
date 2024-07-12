@@ -63,7 +63,7 @@ function Sidebar({}) {
               <Link
                 id="Workout Programs"
                 onClick={handleSelect}
-                href="#"
+                href="/workouts"
                 className={`flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8 ${selected === "Workout Programs" ? "text-accent-foreground bg-accent": "text-muted-foreground bg-transparent"}`}
               >
                 <Dumbbell className="h-5 w-5" />
@@ -96,7 +96,7 @@ function Sidebar({}) {
               <Link
                 id="Clients"
                 onClick={handleSelect}
-                href="#"
+                href="/clients"
                 className={`flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8 ${selected === "Clients" ? "text-accent-foreground bg-accent": "text-muted-foreground bg-transparent"}`}
               >
                 <Users2 className="h-5 w-5" />
