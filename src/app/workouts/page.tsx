@@ -1,5 +1,6 @@
 import Sidebar from "@/components/custom-ui/Sidebar";
-import WorkoutCard, { exercisesType } from "@/components/custom-ui/WorkoutCard";
+import WorkoutCardPreview from "@/components/custom-ui/WorkoutCardPreview";
+import  { exercisesType } from "@/components/custom-ui/WorkoutCardPreview";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -26,54 +27,55 @@ import React from "react";
 
 const exercises: exercisesType = {
   exercises: [
-  {
-    exerciseName: "Bench Press",
-    sets: 4,
-    reps: 5,
-    weight: 220,
-    loadPercentage: 70,
-  },
-  {
-    exerciseName: "Bench Press",
-    sets: 2,
-    reps: 3,
-    weight: 231.5,
-    loadPercentage: 75,
-  },
-  {
-    exerciseName: "EZ Bar Skull Crusher",
-    sets: 4,
-    reps: 10,
-    weight: 70,
-    RPE: 7,
-  },
-  {
-    exerciseName: "DB Press",
-    sets: 4,
-    reps: 8,
-    weight: 70,
-    RPE: 7,
-  },
-  {
-    exerciseName: "Pull Ups",
-    sets: 4,
-    reps: 10,
-  },
-  {
-    exerciseName: "EZ Bar Preacher Curls",
-    sets: 4,
-    reps: 10,
-    weight: 50,
-    RPE: 8,
-  },
-  {
-    exerciseName: "Machine Lateral Raise",
-    sets: 4,
-    reps: 8,
-    weight: 80,
-    RPE: 7,
-  },
-]};
+    {
+      exerciseName: "Bench Press",
+      sets: 4,
+      reps: 5,
+      weight: 220,
+      loadPercentage: 70,
+    },
+    {
+      exerciseName: "Bench Press",
+      sets: 2,
+      reps: 3,
+      weight: 231.5,
+      loadPercentage: 75,
+    },
+    {
+      exerciseName: "EZ Bar Skull Crusher",
+      sets: 4,
+      reps: 10,
+      weight: 70,
+      RPE: 7,
+    },
+    {
+      exerciseName: "DB Press",
+      sets: 4,
+      reps: 8,
+      weight: 70,
+      RPE: 7,
+    },
+    {
+      exerciseName: "Pull Ups",
+      sets: 4,
+      reps: 10,
+    },
+    {
+      exerciseName: "EZ Bar Preacher Curls",
+      sets: 4,
+      reps: 10,
+      weight: 50,
+      RPE: 8,
+    },
+    {
+      exerciseName: "Machine Lateral Raise",
+      sets: 4,
+      reps: 8,
+      weight: 80,
+      RPE: 7,
+    },
+  ],
+};
 
 const WorkoutsPage = () => {
   return (
@@ -132,8 +134,11 @@ const WorkoutsPage = () => {
           </DropdownMenu>
         </header>
         <div>
-          WorkoutsPage
-          <WorkoutCard workoutTitle="Push Day 1" exercises={exercises} date='7-15-2024' />
+          <WorkoutCardPreview
+            workoutTitle="Push Day 1"
+            exercises={exercises}
+            date="7-15-2024"
+          />
         </div>
       </div>
     </div>
