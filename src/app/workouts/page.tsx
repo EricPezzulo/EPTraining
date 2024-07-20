@@ -25,8 +25,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const exercises: exercisesType = {
-  exercises: [
+const exercises: exercisesType =  [
     {
       exerciseName: "Bench Press",
       sets: 4,
@@ -74,8 +73,8 @@ const exercises: exercisesType = {
       weight: 80,
       RPE: 7,
     },
-  ],
-};
+  ]
+
 
 const WorkoutsPage = () => {
   return (

@@ -16,15 +16,13 @@ import { Label } from "../shadcn-ui/label";
 import { Button } from "../shadcn-ui/button";
 
 export type exercisesType = {
-  exercises: {
-    exerciseName: string;
-    sets?: number;
-    reps?: number;
-    weight?: number;
-    RPE?: number;
-    loadPercentage?: number;
-  }[];
-};
+  exerciseName: string;
+  sets?: number;
+  reps?: number;
+  weight?: number;
+  RPE?: number;
+  loadPercentage?: number;
+}[];
 
 interface WorkoutCardPropTypes {
   workoutTitle: string;
@@ -38,7 +36,7 @@ const WorkoutCardPreview = ({
   date,
 }: WorkoutCardPropTypes) => {
   const [showMore, setShowMore] = useState<boolean>(false);
-  console.log(exercises, date);
+  // console.log(JSON.stringify(exercises), date);
   return (
     <div className="p-3">
       <div className="flex w-[300px] flex-col rounded border-2 border-slate-100 bg-white p-5">
@@ -48,7 +46,7 @@ const WorkoutCardPreview = ({
           </p>
           <div className="flex justify-end">
             <Dialog>
-              <DialogTrigger>
+              {/* <DialogTrigger>
                 <DialogHeader>
                   <DialogDescription>
                     <div className="rounded-md p-1 duration-150 ease-in hover:cursor-pointer hover:bg-slate-100">
@@ -56,10 +54,12 @@ const WorkoutCardPreview = ({
                     </div>
                   </DialogDescription>
                 </DialogHeader>
-              </DialogTrigger>
+              </DialogTrigger> */}
+              {/* Problem in <DialogTrigger> */}
+              
               <DialogContent className="h-[550px] overflow-auto ">
                 <div>
-                  {exercises.exercises.map((exercise, index) => (
+                  {exercises.map((exercise, index) => (
                     <div className="py-4" key={index}>
                       <div>
                         {index + 1}.{" "}
@@ -80,17 +80,17 @@ const WorkoutCardPreview = ({
                         </div>
                       </div>
                     </div>
-                  ))}
-                   <DialogClose>
-                  <Button type="button" variant="secondary">
-                    Close
-                  </Button>
-                </DialogClose>
+                  ))} 
+                  <DialogClose>
+                    <Button type="button" variant="secondary">
+                      Close
+                    </Button>
+                  </DialogClose>
                 </div>
-               
-                {/* <Button type="button" variant="default">
+
+                <Button type="button" variant="default">
                     Save
-                  </Button> */}
+                  </Button>
               </DialogContent>
             </Dialog>
           </div>
@@ -98,41 +98,39 @@ const WorkoutCardPreview = ({
 
         <div className="px-2 text-sm">
           <ol>
-            {exercises.exercises
-              .map((exercise, index) => (
-                <div
-                  className="grid grid-cols-2 justify-between py-0.5"
-                  key={index}
-                >
-                  <li className="w-full whitespace-nowrap">
-                    {index + 1}. {exercise.exerciseName}
-                  </li>
-                  <li className="w-full text-right">
-                    {" "}
-                    {exercise.sets}x{exercise.reps}
-                  </li>
-                </div>
-              ))
-              .slice(0, 4)}
+            {exercises.slice(0, 4).map((exercise, index) => (
+              <li
+                className="grid grid-cols-2 justify-between py-0.5"
+                key={index}
+              >
+                <span className="w-full whitespace-nowrap">
+                  {index + 1}. {exercise.exerciseName}
+                </span>
+                <span className="w-full text-right">
+                  {" "}
+                  {exercise.sets}x{exercise.reps}
+                </span>
+              </li>
+            ))}
           </ol>
 
           {showMore ? (
             <ol>
-              {exercises.exercises
+              {exercises.slice(4)
                 .map((exercise, index) => (
-                  <div
+                  <li
                     className="grid grid-cols-2 justify-between py-0.5"
                     key={index}
                   >
-                    <li className="w-full whitespace-nowrap">
+                    <span className="w-full whitespace-nowrap">
                       {index + 1}. {exercise.exerciseName}
-                    </li>
-                    <li className="w-full text-right">
+                    </span>
+                    <span className="w-full text-right">
                       {exercise.sets}x{exercise.reps}
-                    </li>
-                  </div>
+                    </span>
+                  </li>
                 ))
-                .slice(4)}
+                }
             </ol>
           ) : null}
           <button
