@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@/components/shadcn-ui/button";
 import {
   DropdownMenu,
@@ -23,39 +22,20 @@ import Link from "next/link";
 import { useState } from "react";
 import { User } from "./[client]/page";
 import { Badge } from "@/components/shadcn-ui/badge";
+import { ClientDataProps, ClientListProps } from "./page";
 
-interface ClientDataProps {
-  id: number;
-  created_at: string;
-  firstName: string;
-  lastName: string;
-  middleInital: string;
-  weight: number;
-  height: number;
-  phoneNumber: string;
-  activeClientStatus: boolean;
-  nextSession: string;
-  currentPTM: string;
-  totalSessions: string;
-  firstSession: string;
-  clientPicture: string;
-  clientId: string;
-  username: string;
-  schedule: {}[];
-  description: string;
-  bodyFatPercentage: number;
-  clientEmail: string;
-  age: string;
-  DOB: string;
-}
-const ClientsTable = ({ data }: ClientDataProps[]) => {
-  const [clientList, setClientList] = useState<User[]>(data);
-  const [shouldFetch, setShouldFetch] = useState<boolean>(false);
+const ClientsTable: React.FC<ClientListProps> = ({ clients }) => {
+  const [clientList, setClientList] = useState<ClientDataProps[]>(clients);
+
   const handleDelteClient = async (clientId: string) => {
     try {
-      const updatedClients = await deleteClient(clientId);
-      setClientList(updatedClients);
-      setShouldFetch((prev) => !prev);
+      await deleteClient(clientId);
+      const removedClientList = clientList.filter(
+        (client) => client.clientId !== clientId,
+      );
+
+      console.log(removedClientList);
+      setClientList(removedClientList);
     } catch (error) {
       console.error("Error deleting client", error);
     }
