@@ -1,4 +1,3 @@
-"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { File, ListFilter, MoreHorizontal, Search } from "lucide-react";
@@ -49,39 +48,80 @@ import { useEffect, useState } from "react";
 import { User } from "./[client]/page";
 import AddClientDialogBox from "../../components/custom-ui/AddClientDialogBox";
 import { deleteClient } from "@/utils/helpers/deleteClient";
+import ClientsTable from "./ClientsTable";
 
-export default function Dashboard() {
-  const [clientList, setClientList] = useState<User[]>([]);
-  const [shouldFetch, setShouldFetch] = useState<boolean>(false);
+async function fetchClients() {
+  const res = await fetch('http://localhost:3000/clients/api/', {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+  if (!res.ok) {
+    throw new Error("Network response failed");
+  }
+  return res.json();
+};
 
-  useEffect(() => {
-    const fetchClientList = async () => {
-      try {
-        const res = await fetch("/clients/api/", {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        });
-        if (!res.ok) {
-          throw new Error("Network response failed");
-        }
-        const data = await res.json();
-        setClientList(data);
-      } catch (error) {
-        console.error("Error fetching clients:", error);
-      }
-    };
-    fetchClientList();
-  }, [shouldFetch]);
 
-  const handleDelteClient = async (clientId: string) => {
-    try {
-      const updatedClients = await deleteClient(clientId);
-      setClientList(updatedClients);
-      setShouldFetch((prev) => !prev);
-    } catch (error) {
-      console.error("Error deleting client", error);
-    }
-  };
+interface ClientDataProps {
+  id: number;
+  created_at: string;
+  firstName: string;
+  lastName: string;
+  middleInital: string;
+  weight: number;
+  height: number;
+  phoneNumber: string;
+  activeClientStatus: boolean;
+  nextSession: string;
+  currentPTM: string;
+  totalSessions: string;
+  firstSession: string;
+  clientPicture: string;
+  clientId: string;
+  username: string;
+  schedule: {}[];c
+  description: string;
+  bodyFatPercentage: number;
+  clientEmail: string;
+  age: string;
+  DOB: string;
+}
+
+export default async function Dashboard() {
+  const data:ClientDataProps = await fetchClients();
+  console.log(data)
+
+  // const [clientList, setClientList] = useState<User[]>([]);
+  // const [shouldFetch, setShouldFetch] = useState<boolean>(false);
+
+  // useEffect(() => {
+  //   const fetchClientList = async () => {
+  //     try {
+  //       const res = await fetch("/clients/api/", {
+  //         method: "GET",
+  //         headers: { "Content-Type": "application/json" },
+  //       });
+  //       if (!res.ok) {
+  //         throw new Error("Network response failed");
+  //       }
+  //       const data = await res.json();
+  //       setClientList(data);
+  //     } catch (error) {
+  //       console.error("Error fetching clients:", error);
+  //     }
+  //   };
+  //   fetchClientList();
+  // }, [shouldFetch]);
+
+  // const handleDelteClient = async (clientId: string) => {
+  //   try {
+  //     const updatedClients = await deleteClient(clientId);
+  //     setClientList(updatedClients);
+  //     setShouldFetch((prev) => !prev);
+  //   } catch (error) {
+  //     console.error("Error deleting client", error);
+  //   }
+  // };
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -180,7 +220,7 @@ export default function Dashboard() {
                     Export
                   </span>
                 </Button>
-                <AddClientDialogBox setShouldFetch={setShouldFetch} />
+                {/* <AddClientDialogBox setShouldFetch={setShouldFetch} /> */}
               </div>
             </div>
             <TabsContent value="all">
@@ -193,7 +233,8 @@ export default function Dashboard() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Table>
+                  <ClientsTable data={data}/> 
+                  {/* <Table>
                     <TableHeader>
                       <TableRow>
                         <TableHead className="hidden w-[100px] sm:table-cell">
@@ -281,7 +322,7 @@ export default function Dashboard() {
                         </TableRow>
                       ))}
                     </TableBody>
-                  </Table>
+                  </Table> */}
                 </CardContent>
                 <CardFooter>
                   <div className="text-xs text-muted-foreground">

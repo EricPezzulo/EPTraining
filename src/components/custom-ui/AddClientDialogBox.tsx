@@ -19,11 +19,11 @@ interface ChildProps {
   setShouldFetch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AddClientDialogBox: React.FC<ChildProps> = ({ setShouldFetch }) => {
+const AddClientDialogBox: React.FC<ChildProps> = ({ /*setShouldFetch */ }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const newClientInfo = useRef<{
     firstName: string;
-    lastName: string;
+    lastName: string;}
     username: string;
   }>({
     firstName: "",

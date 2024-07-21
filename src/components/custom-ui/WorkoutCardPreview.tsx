@@ -46,18 +46,15 @@ const WorkoutCardPreview = ({
           </p>
           <div className="flex justify-end">
             <Dialog>
-              {/* <DialogTrigger>
-                <DialogHeader>
-                  <DialogDescription>
-                    <div className="rounded-md p-1 duration-150 ease-in hover:cursor-pointer hover:bg-slate-100">
-                      <SquareArrowOutUpRight className="h-5 w-5" />
-                    </div>
-                  </DialogDescription>
-                </DialogHeader>
-              </DialogTrigger> */}
-              {/* Problem in <DialogTrigger> */}
-              
+              <DialogTrigger asChild>
+                <div role='button' aria-label='Edit Workout button' className="rounded-md p-1 duration-150 ease-in hover:cursor-pointer hover:bg-slate-100">
+                  <SquareArrowOutUpRight className="h-5 w-5" />
+                </div>
+              </DialogTrigger>
+
               <DialogContent className="h-[550px] overflow-auto ">
+                <DialogTitle>Edit {workoutTitle}</DialogTitle>
+                <DialogDescription>test</DialogDescription>
                 <div>
                   {exercises.map((exercise, index) => (
                     <div className="py-4" key={index}>
@@ -80,17 +77,15 @@ const WorkoutCardPreview = ({
                         </div>
                       </div>
                     </div>
-                  ))} 
-                  <DialogClose>
+                  ))}
+                  <DialogClose asChild>
                     <Button type="button" variant="secondary">
                       Close
                     </Button>
                   </DialogClose>
-                </div>
 
-                <Button type="button" variant="default">
-                    Save
-                  </Button>
+                  
+                </div>
               </DialogContent>
             </Dialog>
           </div>
@@ -116,26 +111,24 @@ const WorkoutCardPreview = ({
 
           {showMore ? (
             <ol>
-              {exercises.slice(4)
-                .map((exercise, index) => (
-                  <li
-                    className="grid grid-cols-2 justify-between py-0.5"
-                    key={index}
-                  >
-                    <span className="w-full whitespace-nowrap">
-                      {index + 1}. {exercise.exerciseName}
-                    </span>
-                    <span className="w-full text-right">
-                      {exercise.sets}x{exercise.reps}
-                    </span>
-                  </li>
-                ))
-                }
+              {exercises.slice(4).map((exercise, index) => (
+                <li
+                  className="grid grid-cols-2 justify-between py-0.5"
+                  key={index}
+                >
+                  <span className="w-full whitespace-nowrap">
+                    {index + 1}. {exercise.exerciseName}
+                  </span>
+                  <span className="w-full text-right">
+                    {exercise.sets}x{exercise.reps}
+                  </span>
+                </li>
+              ))}
             </ol>
           ) : null}
           <button
             onClick={() => setShowMore((prev) => !prev)}
-            className="w-full items-center pt-1 text-sm text-slate-400 duration-150 ease-in hover:text-slate-700"
+            className="w-full items-center pt-1 text-sm text-slate-600 duration-150 ease-in hover:text-slate-700"
             type="button"
           >
             {showMore ? "show less" : "show more"}
