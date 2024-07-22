@@ -10,7 +10,6 @@ export const deleteClient = async (clientId: string) => {
     }
     const data = await res.json();
     // returns deleted client information
-    console.log(data);
     return data;
   } catch (error) {
     console.error("Could not delete client from database.", error);

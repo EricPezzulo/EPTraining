@@ -10,12 +10,12 @@ export async function POST(req: Request) {
 
     const clientData = { firstName, lastName, username };
 
-    const { data, error } = await supabase.from("clients").insert([clientData]);
+    const { data, error } = await supabase.from("clients").insert([clientData]).select();
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
-
+console.log(data)
     return NextResponse.json({ data }, { status: 200 });
   } catch (error) {
     return NextResponse.json(

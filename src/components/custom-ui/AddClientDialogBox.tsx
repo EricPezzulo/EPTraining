@@ -14,23 +14,25 @@ import { Label } from "@/components/shadcn-ui/label";
 import { PlusCircle } from "lucide-react";
 import React, { useRef, useState } from "react";
 import { DialogClose } from "@radix-ui/react-dialog";
+import { ClientDataProps, ClientListProps } from "@/types/types";
 
-interface ChildProps {
-  setShouldFetch: React.Dispatch<React.SetStateAction<boolean>>;
+export interface AddClientProps {
+  clients: ClientDataProps[];
 }
 
-const AddClientDialogBox: React.FC<ChildProps> = ({ /*setShouldFetch */ }) => {
+const AddClientDialogBox: React.FC<AddClientProps> = ({clients}) => {
   const [loading, setLoading] = useState<boolean>(false);
+  const [shouldFetch, setShouldFetch ] = useState<boolean>(false);
   const newClientInfo = useRef<{
     firstName: string;
-    lastName: string;}
+    lastName: string;
     username: string;
   }>({
     firstName: "",
     lastName: "",
     username: "",
   });
-
+// console.log(clients)
   const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     newClientInfo.current.firstName = e.target.value;
   };
@@ -59,9 +61,12 @@ const AddClientDialogBox: React.FC<ChildProps> = ({ /*setShouldFetch */ }) => {
         throw new Error("Error posting data");
       }
 
-      setShouldFetch((prev) => !prev);
-      const result = await response.json();
-      console.log("Data posted successfully", result.data);
+      
+      const data = await response.json();
+
+      const result = data.data[0]
+      clients.push(result)
+      console.log("Data posted successfully", result);
     } catch (error) {
       console.error(error);
     } finally {

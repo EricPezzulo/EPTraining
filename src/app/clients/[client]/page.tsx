@@ -1,30 +1,9 @@
 "use client";
 import { useRouter } from "next/navigation";
-import {
-  act,
-  FormEvent,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  ChevronLeft,
-  Home,
-  LineChart,
-  Package,
-  Package2,
-  PanelLeft,
-  PlusCircle,
-  Search,
-  Settings,
-  ShoppingCart,
-  Upload,
-  Users2,
-} from "lucide-react";
-
+import { ChevronLeft, Search } from "lucide-react";
 import { Badge } from "@/components/shadcn-ui/badge";
 import {
   Breadcrumb,
@@ -39,7 +18,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/shadcn-ui/card";
@@ -60,26 +38,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcn-ui/select";
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/shadcn-ui/table";
 import { Textarea } from "@/components/shadcn-ui/textarea";
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "@/components/shadcn-ui/toggle-group";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/shadcn-ui/tooltip";
-import { TooltipProvider } from "@radix-ui/react-tooltip";
 import Sidebar from "@/components/custom-ui/Sidebar";
 import {
   Dialog,
@@ -90,43 +49,8 @@ import {
 } from "@/components/shadcn-ui/dialog";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { deleteClient } from "@/utils/helpers/deleteClient";
-import { notFound } from "next/navigation";
-type Session = {
-  sessionType: string;
-  sessionDate: string;
-};
+import { ClientPageProps, User } from "@/types/types";
 
-type Schedule = {
-  sessions: Session[];
-};
-export type User = {
-  firstName: string;
-  lastName: string;
-  middleInitial: string;
-  description: string;
-  clientEmail: string | null;
-  age: number | null;
-  DOB?: string | undefined;
-  bodyFatPercentage: number | null;
-  weight: number | null;
-  height: string | null;
-  phoneNumber: string | null;
-  activeClientStatus: boolean;
-  nextSession: string | null;
-  currentPTM: string;
-  schedule?: Schedule[];
-  totalSessions: number;
-  firstSession: string;
-  clientPicture: string;
-  clientId: string;
-};
-
-interface Params {
-  client: string;
-}
-interface ClientPageProps {
-  params: Params;
-}
 // type ClientRefType = {
 //   phoneNumber: string | null;
 //   firstName: string | null;
@@ -416,50 +340,50 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                           className="w-fill"
                           defaultValue={client.phoneNumber?.toString()}
                         />
-                      <div className=" grid gap-3">
-                        <Label htmlFor="phoneNumber">Phone Number</Label>
-                        <Input
-                          type="text"
-                          id="phoneNumber"
-                          ref={phoneNumber}
-                          className="w-fill"
-                          defaultValue={client.phoneNumber?.toString()}
-                        />
-                      </div>
-                      <div className="grid gap-3">
-                        <Label htmlFor="description">Description</Label>
-                        <Textarea
-                          id="description"
-                          ref={description}
-                          defaultValue={client?.description}
-                          className="min-h-32"
-                        />
-                      </div>
-                      <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <Label htmlFor="client-age">Age</Label>
+                        <div className=" grid gap-3">
+                          <Label htmlFor="phoneNumber">Phone Number</Label>
                           <Input
                             type="text"
-                            id="client-age"
-                            ref={age}
+                            id="phoneNumber"
+                            ref={phoneNumber}
                             className="w-fill"
-                            // defaultValue='Hi'
-                            placeholder="0"
-                            // defaultValue={age.current === null ? "unknown" : client.age?.toString()}
+                            defaultValue={client.phoneNumber?.toString()}
                           />
                         </div>
-                        <div>
-                          <Label htmlFor="dob">Date Of Birth</Label>
-                          <Input
-                            type="text"
-                            id="dob"
-                            ref={displayDate}
-                            className="w-fill"
-                            placeholder="YYYY/MM/DD"
-                            defaultValue={client.DOB}
+                        <div className="grid gap-3">
+                          <Label htmlFor="description">Description</Label>
+                          <Textarea
+                            id="description"
+                            ref={description}
+                            defaultValue={client?.description}
+                            className="min-h-32"
                           />
                         </div>
-                      </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <Label htmlFor="client-age">Age</Label>
+                            <Input
+                              type="text"
+                              id="client-age"
+                              ref={age}
+                              className="w-fill"
+                              // defaultValue='Hi'
+                              placeholder="0"
+                              // defaultValue={age.current === null ? "unknown" : client.age?.toString()}
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="dob">Date Of Birth</Label>
+                            <Input
+                              type="text"
+                              id="dob"
+                              ref={displayDate}
+                              className="w-fill"
+                              placeholder="YYYY/MM/DD"
+                              defaultValue={client.DOB}
+                            />
+                          </div>
+                        </div>
                       </div>
                       {/* <Button onClick={updateClientInfo}>Update</Button> */}
                     </div>
@@ -512,14 +436,17 @@ const ClientPage: React.FC<ClientPageProps> = ({ params }) => {
                   </CardHeader>
                   <CardContent>
                     <div>
-                    <button type='button' className='rounded-md justify-start flex flex-col p-5 border-2 border-slate-100'>
+                      <button
+                        type="button"
+                        className="flex flex-col justify-start rounded-md border-2 border-slate-100 p-5"
+                      >
                         <p>Date: 7/12/24</p>
                         <p>Time: N/A</p>
                         <div className="flex">
                           <p className="w-auto">PT Session: </p>
                           <p className="w-auto">No</p>
                         </div>
-                        <div className='flex flex-col items-start'>
+                        <div className="flex flex-col items-start">
                           <p>Barbell Bench Press 3x10</p>
                           <p>Back Squat 3x6</p>
                           <p>Preacher Curls 3x10</p>

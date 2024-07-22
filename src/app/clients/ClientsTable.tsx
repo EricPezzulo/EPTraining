@@ -20,12 +20,15 @@ import { MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { User } from "./[client]/page";
 import { Badge } from "@/components/shadcn-ui/badge";
-import { ClientDataProps, ClientListProps } from "./page";
+import { ClientListProps } from "@/types/types";
 
-const ClientsTable: React.FC<ClientListProps> = ({ clients }) => {
-  const [clientList, setClientList] = useState<ClientDataProps[]>(clients);
+type ClientsTableProps = {
+  clients: ClientListProps;
+}
+
+const ClientsTable: React.FC<ClientsTableProps> = ({ clients }) => {
+  const [clientList, setClientList] = useState<ClientListProps>(clients);
 
   const handleDelteClient = async (clientId: string) => {
     try {

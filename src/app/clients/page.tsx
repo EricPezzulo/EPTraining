@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { File, ListFilter, MoreHorizontal, Search } from "lucide-react";
-import { Badge } from "@/components/shadcn-ui/badge";
+import { File, ListFilter, Search } from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -28,15 +27,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/shadcn-ui/dropdown-menu";
-import { Input } from "@/components/shadcn-ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/shadcn-ui/table";
+import { Input } from "@/components/shadcn-ui/input"
 import {
   Tabs,
   TabsContent,
@@ -44,14 +35,12 @@ import {
   TabsTrigger,
 } from "@/components/shadcn-ui/tabs";
 import Sidebar from "../../components/custom-ui/Sidebar";
-import { useEffect, useState } from "react";
-import { User } from "./[client]/page";
-import AddClientDialogBox from "../../components/custom-ui/AddClientDialogBox";
-import { deleteClient } from "@/utils/helpers/deleteClient";
 import ClientsTable from "./ClientsTable";
+import { ClientDataProps, ClientListProps } from "@/types/types";
+import AddClientDialogBox from "@/components/custom-ui/AddClientDialogBox";
 
 export async function fetchClients() {
-  const res = await fetch("http://localhost:3000/clients/api/", {
+  const res= await fetch("http://localhost:3000/clients/api/", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -62,40 +51,15 @@ export async function fetchClients() {
   if (!res.ok) {
     throw new Error("Network response failed");
   }
-  return res.json();
+  const data: ClientListProps = await res.json();
+
+  return data
 }
 
-export interface ClientDataProps {
-  id: number;
-  created_at: string;
-  firstName: string;
-  lastName: string;
-  middleInital: string | null;
-  weight: number | null;
-  height: number | null;
-  phoneNumber: string | null;
-  activeClientStatus: boolean | null;
-  nextSession: string | null;
-  currentPTM: string | null;
-  totalSessions: string | null;
-  firstSession: string | null;
-  clientPicture: string | null;
-  clientId: string;
-  username: string | null;
-  schedule: any[] | null;
-  description: string | null;
-  bodyFatPercentage: number | null;
-  clientEmail: string | null;
-  age: string | null;
-  DOB: string | null;
-}
-export interface ClientListProps {
-  clients: ClientDataProps[];
-}
 
 export default async function Dashboard() {
   const data: ClientDataProps[] = await fetchClients();
-  console.log(data);
+  console.log(data)
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -194,7 +158,7 @@ export default async function Dashboard() {
                     Export
                   </span>
                 </Button>
-                {/* <AddClientDialogBox setShouldFetch={setShouldFetch} /> */}
+                <AddClientDialogBox clients={data}  />
               </div>
             </div>
             <TabsContent value="all">
