@@ -38,6 +38,7 @@ import Sidebar from "../../components/custom-ui/Sidebar";
 import ClientsTable from "./ClientsTable";
 import { ClientDataProps, ClientListProps } from "@/types/types";
 import AddClientDialogBox from "@/components/custom-ui/AddClientDialogBox";
+import ClientsTableWrapper from "./ClientsTable";
 
 export async function fetchClients() {
   const res= await fetch("http://localhost:3000/clients/api/", {
@@ -171,7 +172,7 @@ export default async function Dashboard() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ClientsTable clients={data} />
+                  <ClientsTableWrapper clients={data} />
                 </CardContent>
                 <CardFooter>
                   <div className="text-xs text-muted-foreground">

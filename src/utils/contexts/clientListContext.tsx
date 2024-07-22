@@ -9,7 +9,7 @@ interface ClientListContextProps {
 
 const ClientListContext = createContext<ClientListContextProps | undefined>(undefined)
 
-export const DataProvider: React.FC<{ children: ReactNode, initialData: ClientDataProps[] }> = ({ children, initialData }) => {
+export const ClientListProvider: React.FC<{ children: ReactNode, initialData: ClientDataProps[] }> = ({ children, initialData }) => {
   const [data, setData] = useState<ClientDataProps[]>(initialData);
 
   return (
