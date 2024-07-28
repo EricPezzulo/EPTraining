@@ -22,29 +22,21 @@ import Link from "next/link";
 import { useState } from "react";
 import { Badge } from "@/components/shadcn-ui/badge";
 import { ClientListProps } from "@/types/types";
-import { ClientListProvider, useData } from "@/utils/contexts/clientListContext";
 
 type ClientsTableProps = {
   clients: ClientListProps;
 }
 
-const ClientsTableWrapper: React.FC<{ clients:ClientsTableProps }> = ({ clients}) => {
 
-  return (
-    <ClientListProvider initialData={clients}>
-      <ClientsTable />
-    </ClientListProvider>
-  )
-}
 
-const ClientsTable = () => {
-  const {data} = useData();
-  // const [clientList, setClientList] = useState<ClientListProps>(clients);
+const ClientsTable: React.FC<ClientsTableProps> = ({clients}) => {
+
+  const [clientList, setClientList] = useState<ClientListProps>(clients);
 
   const handleDelteClient = async (clientId: string) => {
     try {
       await deleteClient(clientId);
-      const removedClientList = data.filter(
+      const removedClientList = clientList.filter(
         (client) => client.clientId !== clientId,
       );
 
@@ -77,7 +69,7 @@ const ClientsTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data?.map((client, index) => (
+          {clientList?.map((client, index) => (
             <TableRow key={index}>
               <TableCell className="hidden sm:table-cell">
                 <Image
@@ -135,4 +127,4 @@ const ClientsTable = () => {
   );
 };
 
-export default ClientsTableWrapper;
+export default ClientsTable;

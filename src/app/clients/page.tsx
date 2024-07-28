@@ -27,7 +27,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/shadcn-ui/dropdown-menu";
-import { Input } from "@/components/shadcn-ui/input"
+import { Input } from "@/components/shadcn-ui/input";
 import {
   Tabs,
   TabsContent,
@@ -38,29 +38,32 @@ import Sidebar from "../../components/custom-ui/Sidebar";
 import ClientsTable from "./ClientsTable";
 import { ClientDataProps, ClientListProps } from "@/types/types";
 import AddClientDialogBox from "@/components/custom-ui/AddClientDialogBox";
-import ClientsTableWrapper from "./ClientsTable";
+import { useFetchClients } from "../hooks/use-fetch-clients";
 
-export async function fetchClients() {
-  const res= await fetch("http://localhost:3000/clients/api/", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "Cache-Control": "no-cache",
-    },
-    cache: 'no-store'
-  });
-  if (!res.ok) {
-    throw new Error("Network response failed");
-  }
-  const data: ClientListProps = await res.json();
+// export async function fetchClients() {
+//   try {
+//     const res = await fetch("http://localhost:3001/clients/api/", {
+//       method: "GET",
+//       headers: {
+//         "Content-Type": "application/json",
+//         "Cache-Control": "no-cache",
+//       },
+//       cache: "no-store",
+//     });
+//     if (!res.ok) {
+//       throw new Error("Network response failed");
+//     }
+//     const data: ClientListProps = await res.json();
 
-  return data
-}
-
+//     return data;
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }
 
 export default async function Dashboard() {
-  const data: ClientDataProps[] = await fetchClients();
-  console.log(data)
+  const { data, isLoading, isError } = useFetchClients();
+  console.log(data, "hi");
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -159,7 +162,7 @@ export default async function Dashboard() {
                     Export
                   </span>
                 </Button>
-                <AddClientDialogBox clients={data}  />
+                <AddClientDialogBox clients={data} />
               </div>
             </div>
             <TabsContent value="all">
@@ -172,7 +175,7 @@ export default async function Dashboard() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ClientsTableWrapper clients={data} />
+                  <ClientsTable clients={data} />
                 </CardContent>
                 <CardFooter>
                   <div className="text-xs text-muted-foreground">

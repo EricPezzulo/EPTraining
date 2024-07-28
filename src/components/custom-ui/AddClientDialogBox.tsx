@@ -15,26 +15,13 @@ import { PlusCircle } from "lucide-react";
 import React, { useRef, useState } from "react";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { ClientDataProps, ClientListProps } from "@/types/types";
-import {
-  ClientListProvider,
-  useData,
-} from "@/utils/contexts/clientListContext";
 
 export interface AddClientProps {
   clients: ClientDataProps[];
 }
 
-const AddClientDialogBoxWrapper: React.FC<{ clients: AddClientProps }> = ({
-  clients,
-}) => {
-  return (
-    <ClientListProvider initialData={clients}>
-      <AddClientDialogBox  />
-    </ClientListProvider>
-  );
-};
 const AddClientDialogBox: React.FC<AddClientProps> = ({ clients }) => {
-  const { data: clientData } = useData();
+  const [clientList, setClientList] = useState<ClientDataProps[]>(clients);
   const [loading, setLoading] = useState<boolean>(false);
   // const [shouldFetch, setShouldFetch ] = useState<boolean>(false);
   const newClientInfo = useRef<{
@@ -78,7 +65,9 @@ const AddClientDialogBox: React.FC<AddClientProps> = ({ clients }) => {
       const data = await response.json();
 
       const result = data.data[0];
-      clientData.push(result);
+      setClientList((clientList) => {
+        return { ...clientList, result };
+      });
       console.log("Data posted successfully", result);
     } catch (error) {
       console.error(error);

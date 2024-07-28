@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "dev-trace" : "NODE_OPTIONS='--trace-deprecation' next dev",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -25,7 +26,12 @@
     "@radix-ui/react-tooltip": "^1.1.2",
     "@supabase/ssr": "^0.3.0",
     "@supabase/supabase-js": "^2.44.4",
+<<<<<<< HEAD
     "@tanstack/react-query": "^5.51.11",
+=======
+    "@tanstack/react-query": "^5.51.15",
+    "@tanstack/react-query-devtools": "^5.51.15",
+>>>>>>> 070f276 (adding react query to project)
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.378.0",
